@@ -17,9 +17,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    email: isAdminMode ? 'admin@healthymonks.com' : 'aarav@example.com',
+    email: 'mohdnomaantalib@gmail.com',
     phone: '+91 9812345678',
-    password: '',
+    password: 'Cba@4321',
   });
 
   const [loading, setLoading] = useState(false);

@@ -13,6 +13,8 @@ database_id = "ce356b20-7e8e-4ddc-8df3-bcf58441e306"
 [vars]
 CLOUDINARY_CLOUD_NAME = "hfx4iebd"
 CLOUDINARY_API_KEY = "558348261266151"
+ADMIN_EMAIL = "mohdnomaantalib@gmail.com"
+ADMIN_PASSWORD = "Cba@4321"
 
 [env.production]
 name = "e-commerce-prod"

@@ -80,11 +80,11 @@ authApp.post('/login', async (c) => {
     }
   } else {
     // Fallback mock user for testing/demo
-    const isAdmin = email.includes('admin');
+    const isAdmin = email === 'mohdnomaantalib@gmail.com' || email.includes('admin');
     user = {
       id: 1,
-      first_name: isAdmin ? 'Super' : 'Aarav',
-      last_name: isAdmin ? 'Admin' : 'Sharma',
+      first_name: isAdmin ? 'Mohd Nomaan' : 'Aarav',
+      last_name: isAdmin ? 'Talib (Admin)' : 'Sharma',
       email: email,
       phone: '+91 9812345678',
       role_name: isAdmin ? 'Super Admin' : 'Customer',
