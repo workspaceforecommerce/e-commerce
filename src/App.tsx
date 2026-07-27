@@ -120,6 +120,7 @@ export const AppContent: React.FC = () => {
             <CheckoutView
               onOrderSuccess={handleOrderSuccess}
               onBackToCart={() => setActiveTab('cart')}
+              user={user}
             />
           )}
 
