@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Truck, CheckCircle, Package, Clock, ExternalLink, Download, FileText } from 'lucide-react';
+import { Search, Truck, CheckCircle, Package, Clock, ExternalLink, Download, FileText, Loader2 } from 'lucide-react';
 import { Order } from '../types';
 
 interface OrderTrackViewProps {
@@ -83,8 +83,8 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      <div className="wp-card p-6 rounded-2xl space-y-4">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-in fade-in duration-300">
+      <div className="wp-card p-6 rounded-2xl space-y-4 bg-white border border-slate-200 shadow-xs">
         <h1 className="font-heading text-2xl font-bold text-slate-900">Track Your Shipment</h1>
         <p className="text-xs text-slate-500">Enter your Order Number (e.g., HM-ORD-1001) to view live delivery status.</p>
 
@@ -95,24 +95,44 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
               placeholder="HM-ORD-1001"
               value={searchNumber}
               onChange={(e) => setSearchNumber(e.target.value)}
-              className="w-full bg-white text-slate-900 font-mono text-xs rounded-xl pl-9 pr-4 py-3 border border-slate-300 focus:outline-none focus:border-emerald-700"
+              className="w-full bg-white text-slate-900 font-mono text-xs rounded-xl pl-9 pr-4 py-3 border border-slate-300 focus:outline-none focus:border-emerald-700 transition-colors"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs"
+            className="bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs flex items-center gap-2 active:scale-95 disabled:opacity-50"
           >
-            {loading ? 'Searching...' : 'Track'}
+            {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+            {loading ? 'Searching...' : 'Track Order'}
           </button>
         </form>
 
         {error && <p className="text-xs text-red-600 font-medium">{error}</p>}
       </div>
 
+      {/* Loading Skeleton */}
+      {loading && !order && (
+        <div className="wp-card p-6 sm:p-8 rounded-2xl space-y-6 bg-white border border-slate-200 animate-pulse">
+          <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+            <div className="space-y-2">
+              <div className="h-3 w-24 bg-slate-200 rounded-md" />
+              <div className="h-6 w-40 bg-slate-200 rounded-md" />
+            </div>
+            <div className="h-8 w-28 bg-slate-200 rounded-xl" />
+          </div>
+          <div className="h-16 bg-slate-100 rounded-xl" />
+          <div className="space-y-2">
+            <div className="h-12 bg-slate-100 rounded-xl" />
+            <div className="h-12 bg-slate-100 rounded-xl" />
+          </div>
+        </div>
+      )}
+
+      {/* Order Details Card */}
       {order && (
-        <div className="wp-card p-6 sm:p-8 rounded-2xl space-y-6">
+        <div className={`wp-card p-6 sm:p-8 rounded-2xl space-y-6 bg-white border border-slate-200 shadow-sm transition-opacity duration-300 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
               <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Order Status</span>
@@ -177,7 +197,7 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
                   href={order.tracking_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all"
+                  className="flex items-center gap-1 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-xs"
                 >
                   Live Courier Tracking <ExternalLink className="w-3.5 h-3.5" />
                 </a>
