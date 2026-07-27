@@ -18,6 +18,7 @@ import wishlistApp from './routes/wishlist';
 import addressesApp from './routes/addresses';
 import checkoutApp from './routes/checkout';
 import paymentsApp from './routes/payments';
+import shippingApp from './routes/shipping';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -70,5 +71,6 @@ app.route('/api/wishlist', wishlistApp);
 app.route('/api/addresses', addressesApp);
 app.route('/api/checkout', checkoutApp);
 app.route('/api/payments', paymentsApp);
+app.route('/api/shipping', shippingApp);
 
 export default app;

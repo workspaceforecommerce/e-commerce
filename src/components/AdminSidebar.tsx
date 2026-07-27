@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   LayoutDashboard, Package, FolderTree, ShoppingBag, Clock, Sliders,
   Send, Users, ShieldCheck, ChevronLeft, ChevronRight, LogOut,
-  Sparkles, MessageSquare, Activity, Images, Tag, Ticket, CreditCard
+  Sparkles, MessageSquare, Activity, Images, Tag, Ticket, CreditCard, Truck
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -28,6 +28,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'reviews', label: 'Customer Reviews', icon: MessageSquare },
     { id: 'coupons', label: 'Coupons & Promotions', icon: Ticket },
     { id: 'payments', label: 'Payments & Gateways', icon: CreditCard },
+    { id: 'shipping', label: 'Shipping & Logistics', icon: Truck },
     { id: 'api-logs', label: 'Security & Audit Logs', icon: Activity },
   ];
 
