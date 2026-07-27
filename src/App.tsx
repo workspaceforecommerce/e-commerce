@@ -170,54 +170,54 @@ export const AppContent: React.FC = () => {
       </div>
 
       {/* WordPress WooCommerce Footer */}
-      <footer className="border-t border-slate-200 bg-white pt-10 pb-8 px-4 text-xs text-slate-600 mt-12">
+      <footer className="border-t border-emerald-800 bg-emerald-900 pt-10 pb-8 px-4 text-xs text-emerald-100 mt-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-1">
               <img src="/logo.png" alt="Healthy Monks" className="w-9 h-9 rounded-xl object-cover" />
-              <span className="font-heading font-extrabold text-lg text-slate-900 block">Healthy Monks</span>
+              <span className="font-heading font-extrabold text-lg text-white block">Healthy Monks</span>
             </div>
-            <p className="text-slate-500 leading-relaxed">100% Certified Organic &amp; Authentic Ayurvedic Formulations Sourced Directly from Himalayan Farms.</p>
-            <span className="inline-block bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded border border-emerald-200">
-              FSSAI & Ayush Ministry Approved
+            <p className="text-emerald-200 leading-relaxed">100% Certified Organic &amp; Authentic Ayurvedic Formulations Sourced Directly from Himalayan Farms.</p>
+            <span className="inline-block bg-emerald-700 text-emerald-100 text-[11px] font-bold px-2.5 py-1 rounded border border-emerald-600">
+              FSSAI &amp; Ayush Ministry Approved
             </span>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-heading font-bold text-slate-900 text-sm">Product Categories</h4>
-            <ul className="space-y-1.5 text-slate-600">
-              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Immunity Boosters</button></li>
-              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Organic Teas & Infusions</button></li>
-              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Ayurvedic Churna & Powders</button></li>
-              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Superfoods & Raw Seeds</button></li>
+            <h4 className="font-heading font-bold text-white text-sm">Product Categories</h4>
+            <ul className="space-y-1.5 text-emerald-200">
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-white transition-colors">Immunity Boosters</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-white transition-colors">Organic Teas &amp; Infusions</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-white transition-colors">Ayurvedic Churna &amp; Powders</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-white transition-colors">Superfoods &amp; Raw Seeds</button></li>
             </ul>
           </div>
 
           <div className="space-y-2">
-            <h4 className="font-heading font-bold text-slate-900 text-sm">Customer Care</h4>
-            <ul className="space-y-1.5 text-slate-600">
-              <li><button onClick={() => setActiveTab('track')} className="hover:text-emerald-700">Track Order Status</button></li>
-              <li><span>Shipping & Delivery Policy</span></li>
+            <h4 className="font-heading font-bold text-white text-sm">Customer Care</h4>
+            <ul className="space-y-1.5 text-emerald-200">
+              <li><button onClick={() => setActiveTab('track')} className="hover:text-white transition-colors">Track Order Status</button></li>
+              <li><span>Shipping &amp; Delivery Policy</span></li>
               <li><span>7-Day Return Guarantee</span></li>
-              <li><span>Terms & Privacy Policy</span></li>
+              <li><span>Terms &amp; Privacy Policy</span></li>
             </ul>
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-heading font-bold text-slate-900 text-sm">Payment Methods</h4>
-            <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-700">
-              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">Cash on Delivery</span>
-              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">UPI / QR</span>
-              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">Cards</span>
-              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">NetBanking</span>
+            <h4 className="font-heading font-bold text-white text-sm">Payment Methods</h4>
+            <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-emerald-100">
+              <span className="px-2 py-1 bg-emerald-800 rounded border border-emerald-700">Cash on Delivery</span>
+              <span className="px-2 py-1 bg-emerald-800 rounded border border-emerald-700">UPI / QR</span>
+              <span className="px-2 py-1 bg-emerald-800 rounded border border-emerald-700">Cards</span>
+              <span className="px-2 py-1 bg-emerald-800 rounded border border-emerald-700">NetBanking</span>
             </div>
-            <p className="text-[11px] text-slate-500">Secure SSL Encrypted Checkout</p>
+            <p className="text-[11px] text-emerald-300">Secure SSL Encrypted Checkout</p>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-slate-100 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+        <div className="max-w-7xl mx-auto border-t border-emerald-800 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-emerald-300 gap-2">
           <p>© 2026 Healthy Monks Organic Store. All rights reserved.</p>
-          <p>Certified Organic Ayurvedic Supplements & Herbal Remedies</p>
+          <p>Certified Organic Ayurvedic Supplements &amp; Herbal Remedies</p>
         </div>
       </footer>
 

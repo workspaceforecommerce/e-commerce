@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* 4. Sub-Navigation Category Links */}
-      <div className="bg-slate-50 border-t border-slate-200 px-4 sm:px-6 lg:px-8 overflow-x-auto scrollbar-none">
+      <div className="bg-emerald-900 border-t border-emerald-800 px-4 sm:px-6 lg:px-8 overflow-x-auto scrollbar-none">
         <div className="max-w-7xl mx-auto flex items-center gap-1 sm:gap-2 text-xs font-semibold whitespace-nowrap py-1">
           <button
             onClick={() => {
@@ -156,8 +156,8 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className={`px-3 py-2 rounded-lg transition-all ${
               activeTab === 'shop'
-                ? 'bg-emerald-700 text-white font-bold'
-                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+                ? 'bg-white text-emerald-900 font-bold'
+                : 'text-emerald-100 hover:text-white hover:bg-emerald-700/60'
             }`}
           >
             All Catalog
@@ -170,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onSelectCategory(cat.id);
                 setActiveTab('shop');
               }}
-              className="px-3 py-2 rounded-lg text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60 transition-all"
+              className="px-3 py-2 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-700/60 transition-all"
             >
               {cat.name}
             </button>
@@ -180,8 +180,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setActiveTab('blog')}
             className={`px-3 py-2 rounded-lg transition-all ${
               activeTab === 'blog'
-                ? 'bg-emerald-700 text-white font-bold'
-                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+                ? 'bg-white text-emerald-900 font-bold'
+                : 'text-emerald-100 hover:text-white hover:bg-emerald-700/60'
             }`}
           >
             Health Blog
@@ -191,8 +191,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setActiveTab('about')}
             className={`px-3 py-2 rounded-lg transition-all ${
               activeTab === 'about'
-                ? 'bg-emerald-700 text-white font-bold'
-                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+                ? 'bg-white text-emerald-900 font-bold'
+                : 'text-emerald-100 hover:text-white hover:bg-emerald-700/60'
             }`}
           >
             About Us
@@ -202,8 +202,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setActiveTab('contact')}
             className={`px-3 py-2 rounded-lg transition-all ${
               activeTab === 'contact'
-                ? 'bg-emerald-700 text-white font-bold'
-                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+                ? 'bg-white text-emerald-900 font-bold'
+                : 'text-emerald-100 hover:text-white hover:bg-emerald-700/60'
             }`}
           >
             Contact
@@ -213,8 +213,8 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setActiveTab('track')}
             className={`px-3 py-2 rounded-lg transition-all ml-auto ${
               activeTab === 'track'
-                ? 'bg-amber-600 text-white font-bold'
-                : 'text-amber-800 font-bold hover:bg-amber-100'
+                ? 'bg-amber-400 text-emerald-950 font-bold'
+                : 'text-amber-300 font-bold hover:bg-amber-400/20 hover:text-amber-200'
             }`}
           >
             Track Order
