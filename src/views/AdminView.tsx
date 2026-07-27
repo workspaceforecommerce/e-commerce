@@ -44,12 +44,13 @@ import { CustomerAnalyticsSegmentationView } from './CustomerAnalyticsSegmentati
 import { CmsCoreManagementView } from './CmsCoreManagementView';
 import { VisualPageBuilderView } from './VisualPageBuilderView';
 import { PublishingContentCmsView } from './PublishingContentCmsView';
+import { MarketingCampaignsView } from './MarketingCampaignsView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'customers' | 'customer-analytics' | 'loyalty' | 'tickets' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'visual-builder' | 'blog-cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'customers' | 'customer-analytics' | 'loyalty' | 'tickets' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'visual-builder' | 'blog-cms' | 'marketing-campaigns' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -430,6 +431,9 @@ export const AdminView: React.FC = () => {
 
           {/* 7C. Blog, News & Documentation CMS */}
           {activeTab === 'blog-cms' && <PublishingContentCmsView />}
+
+          {/* 7D. Banners, Popups & Marketing Campaigns */}
+          {activeTab === 'marketing-campaigns' && <MarketingCampaignsView />}
 
           {/* 5. Users & RBAC */}
           {activeTab === 'users-rbac' && <UserManagementView />}

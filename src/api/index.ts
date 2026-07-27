@@ -30,6 +30,7 @@ import analyticsApp from './routes/analytics';
 import cmsApp from './routes/cms';
 import builderApp from './routes/builder';
 import contentApp from './routes/content';
+import campaignsApp from './routes/campaigns';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -131,5 +132,6 @@ app.route('/api/analytics', analyticsApp);
 app.route('/api/cms', cmsApp);
 app.route('/api/builder', builderApp);
 app.route('/api/content', contentApp);
+app.route('/api/campaigns', campaignsApp);
 
 export default app;
