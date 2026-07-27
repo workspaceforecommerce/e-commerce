@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   LayoutDashboard, Package, FolderTree, ShoppingBag, Clock, Sliders,
   Send, Users, ShieldCheck, ChevronLeft, ChevronRight, LogOut,
-  Sparkles, MessageSquare, Activity, Images, Tag, Ticket, CreditCard, Truck, RotateCcw, FileText
+  Sparkles, MessageSquare, Activity, Images, Tag, Ticket, CreditCard, Truck, RotateCcw, FileText, HelpCircle
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -23,6 +23,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'media', label: 'Media Library', icon: Images },
     { id: 'orders', label: 'Order Fulfillment', icon: ShoppingBag },
     { id: 'customers', label: 'Customer CRM & Groups', icon: Users },
+    { id: 'tickets', label: 'Support & Help Desk', icon: HelpCircle },
     { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },
     { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
     { id: 'cms', label: 'CMS & Banner Editor', icon: Sliders },

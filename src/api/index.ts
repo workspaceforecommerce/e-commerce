@@ -24,6 +24,7 @@ import invoicesApp from './routes/invoices';
 import notificationsApp from './routes/notifications';
 import customersApp from './routes/customers';
 import staffApp from './routes/staff';
+import ticketsApp from './routes/tickets';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -82,5 +83,6 @@ app.route('/api/invoices', invoicesApp);
 app.route('/api/notifications', notificationsApp);
 app.route('/api/customers', customersApp);
 app.route('/api/staff', staffApp);
+app.route('/api/tickets', ticketsApp);
 
 export default app;
