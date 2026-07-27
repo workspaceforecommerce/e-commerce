@@ -26,6 +26,7 @@ export const AppContent: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [placedOrderNumber, setPlacedOrderNumber] = useState<string>('');
+  const [user, setUser] = useState<any | null>(null);
 
   useEffect(() => {
     // Fetch categories & products from Workers API Engine or fallback
@@ -73,6 +74,7 @@ export const AppContent: React.FC = () => {
           setSearchQuery={setSearchQuery}
           categories={categories}
           onSelectCategory={handleSelectCategory}
+          user={user}
         />
 
         {/* Main View Router */}
@@ -125,7 +127,24 @@ export const AppContent: React.FC = () => {
             />
           )}
 
-          {activeTab === 'admin' && <AdminView />}
+          {activeTab === 'admin' && (
+            user && ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(user.role) ? (
+              <AdminView />
+            ) : (
+              <div className="max-w-md mx-auto py-8">
+                <div className="bg-amber-50 border border-amber-300 text-amber-900 px-4 py-3 rounded-2xl text-xs font-bold mb-4 flex items-center justify-between">
+                  <span>🔒 Admin Authentication Required</span>
+                  <span className="text-[10px] bg-amber-200 px-2 py-0.5 rounded font-mono">Demo: admin@healthymonks.com / admin123</span>
+                </div>
+                <LoginView
+                  onLoginSuccess={(loggedInUser) => {
+                    setUser(loggedInUser);
+                  }}
+                  onBackToHome={() => setActiveTab('home')}
+                />
+              </div>
+            )
+          )}
           {activeTab === 'blog' && <BlogView />}
           {activeTab === 'about' && <AboutView />}
           {activeTab === 'contact' && <ContactView />}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, ShieldCheck, Truck, RefreshCw, Award, Star, Flame, Sparkles, Leaf, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Truck, RefreshCw, Award, Star, Flame, Sparkles, Leaf, CheckCircle2, ShoppingBag, FileText, Phone } from 'lucide-react';
 import { Category, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import { BlogSection } from '../components/BlogSection';
@@ -137,11 +137,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </ul>
           </div>
 
-          {/* Quick Pages & Store Navigation Widget */}
-          <div className="wp-card p-5 sm:p-6 rounded-2xl space-y-3">
+          {/* Store Pages Navigation Sidebar Widget */}
+          <div className="wp-card p-5 sm:p-6 rounded-2xl space-y-3 bg-white border border-slate-200">
             <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5">
               <Sparkles className="w-4 h-4 text-emerald-700" />
-              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-900">Explore Store Pages</h3>
+              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-900">Store Pages & Navigation</h3>
             </div>
             <ul className="space-y-1 text-xs text-slate-700 font-semibold">
               <li>
@@ -149,7 +149,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   onClick={onExploreShop}
                   className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
                 >
-                  <span>All Herbal Catalog</span>
+                  <span className="flex items-center gap-2">
+                    <ShoppingBag className="w-3.5 h-3.5 text-emerald-700" /> All Products Catalog
+                  </span>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               </li>
@@ -158,7 +160,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   onClick={() => onNavigate('blog')}
                   className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
                 >
-                  <span>Health & Wellness Journal</span>
+                  <span className="flex items-center gap-2">
+                    <FileText className="w-3.5 h-3.5 text-emerald-700" /> Health & Wellness Journal
+                  </span>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               </li>
@@ -167,7 +171,20 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   onClick={() => onNavigate('about')}
                   className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
                 >
-                  <span>About Himalayan Sourcing</span>
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> About Himalayan Sourcing
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('track')}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-amber-50 hover:text-amber-900 transition-colors flex items-center justify-between"
+                >
+                  <span className="flex items-center gap-2 text-amber-800">
+                    <Truck className="w-3.5 h-3.5 text-amber-700" /> Track Order Status
+                  </span>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               </li>
@@ -176,7 +193,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   onClick={() => onNavigate('contact')}
                   className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
                 >
-                  <span>Contact Customer Support</span>
+                  <span className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-emerald-700" /> Contact Customer Support
+                  </span>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
                 </button>
               </li>

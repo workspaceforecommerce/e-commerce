@@ -10,6 +10,7 @@ interface HeaderProps {
   setSearchQuery: (query: string) => void;
   categories?: Category[];
   onSelectCategory?: (catId: number | null) => void;
+  user?: any;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   setSearchQuery,
   categories = [],
   onSelectCategory = () => {},
+  user = null,
 }) => {
   const { cart } = useCart();
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -115,13 +117,23 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          <button
-            onClick={() => setActiveTab('admin')}
-            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2.5 rounded-xl transition-all font-bold text-xs shadow-xs"
-          >
-            <User className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">Control Panel</span>
-          </button>
+          {user ? (
+            <button
+              onClick={() => setActiveTab('admin')}
+              className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white px-3.5 py-2.5 rounded-xl transition-all font-bold text-xs shadow-xs"
+            >
+              <User className="w-3.5 h-3.5 text-amber-300" />
+              <span className="hidden sm:inline">{user.name || 'My Account'}</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setActiveTab('login')}
+              className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2.5 rounded-xl transition-all font-bold text-xs shadow-xs"
+            >
+              <User className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Sign In / Account</span>
+            </button>
+          )}
         </div>
       </div>
 
