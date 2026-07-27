@@ -18,6 +18,7 @@
   }
 
   html {
+    font-size: 102%;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }

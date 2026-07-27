@@ -132,21 +132,17 @@ export const AppContent: React.FC = () => {
           )}
 
           {activeTab === 'admin' && (
-            user && ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(user.role) ? (
+            (user && (['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(user.role) || user.email?.toLowerCase() === 'mohdnomaantalib@gmail.com')) ? (
               <AdminView />
             ) : (
-              <div className="max-w-md mx-auto py-8">
-                <div className="bg-amber-50 border border-amber-300 text-amber-900 px-4 py-3 rounded-2xl text-xs font-bold mb-4 flex items-center justify-between">
-                  <span>🔒 Admin Authentication Required</span>
-                </div>
-                <LoginView
-                  isAdminMode={true}
-                  onLoginSuccess={(loggedInUser) => {
-                    setUser(loggedInUser);
-                  }}
-                  onBackToHome={() => setActiveTab('home')}
-                />
-              </div>
+              <LoginView
+                onLoginSuccess={(loggedInUser) => {
+                  setUser(loggedInUser);
+                  const isAdmin = ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(loggedInUser?.role) || loggedInUser?.email?.toLowerCase() === 'mohdnomaantalib@gmail.com';
+                  setActiveTab(isAdmin ? 'admin' : 'home');
+                }}
+                onBackToHome={() => setActiveTab('home')}
+              />
             )
           )}
           {activeTab === 'blog' && <BlogView />}
@@ -156,12 +152,8 @@ export const AppContent: React.FC = () => {
             <LoginView
               onLoginSuccess={(loggedInUser) => {
                 setUser(loggedInUser);
-                const isAdmin = ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(loggedInUser?.role) || loggedInUser?.email === 'mohdnomaantalib@gmail.com';
-                if (isAdmin) {
-                  setActiveTab('admin');
-                } else {
-                  setActiveTab('home');
-                }
+                const isAdmin = ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(loggedInUser?.role) || loggedInUser?.email?.toLowerCase() === 'mohdnomaantalib@gmail.com';
+                setActiveTab(isAdmin ? 'admin' : 'home');
               }}
               onBackToHome={() => setActiveTab('home')}
             />

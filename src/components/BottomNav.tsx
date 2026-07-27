@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Grid, ShoppingBag, Truck, LayoutDashboard } from 'lucide-react';
+import { Home, Grid, ShoppingBag, Truck, User } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 interface BottomNavProps {
@@ -15,7 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
     { id: 'shop', label: 'Shop', icon: Grid },
     { id: 'cart', label: 'Cart', icon: ShoppingBag, badge: cartCount },
     { id: 'track', label: 'Orders', icon: Truck },
-    { id: 'admin', label: 'Admin', icon: LayoutDashboard }
+    { id: 'login', label: 'Account', icon: User }
   ];
 
   return (
