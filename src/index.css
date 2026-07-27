@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 @layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-emerald-200 selection:text-emerald-950;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
   :root {
     --wp-forest: #15803d;
     --wp-forest-dark: #166534;

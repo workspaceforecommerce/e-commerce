@@ -17,6 +17,7 @@ import { BlogView } from './views/BlogView';
 import { AboutView } from './views/AboutView';
 import { ContactView } from './views/ContactView';
 import { Category, Product } from './types';
+import { I18nProvider } from './context/I18nContext';
 
 export const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -218,10 +219,12 @@ export const AppContent: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <PWAProvider>
-      <CartProvider>
-        <AppContent />
-      </CartProvider>
-    </PWAProvider>
+    <I18nProvider>
+      <PWAProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </PWAProvider>
+    </I18nProvider>
   );
 };
