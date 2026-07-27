@@ -25,7 +25,7 @@ export const CloudinaryUpload: React.FC<CloudinaryUploadProps> = ({
     try {
       // 1. Fetch Cloudinary Upload Signature from Workers Backend
       const sigRes = await fetch('/api/cloudinary/signature', { method: 'POST' });
-      const sigData = await sigRes.json();
+      const sigData: any = await sigRes.json();
 
       if (!sigData.success) {
         throw new Error('Failed to obtain Cloudinary signature');
@@ -45,7 +45,7 @@ export const CloudinaryUpload: React.FC<CloudinaryUploadProps> = ({
         body: formData,
       });
 
-      const cloudData = await cloudRes.json();
+      const cloudData: any = await cloudRes.json();
 
       if (cloudData.secure_url) {
         setPreviewUrl(cloudData.secure_url);

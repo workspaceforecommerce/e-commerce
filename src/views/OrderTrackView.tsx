@@ -20,7 +20,7 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
 
     try {
       const res = await fetch(`/api/orders/track/${ordNum.trim()}`);
-      const data = await res.json();
+      const data: any = await res.json();
       if (data.success && data.order) {
         setOrder(data.order);
       } else {
@@ -84,9 +84,9 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      <div className="glass-card p-6 rounded-3xl space-y-4">
-        <h1 className="font-heading text-2xl font-bold text-white">Track Your Parcel</h1>
-        <p className="text-xs text-slate-400">Enter your Order Number (e.g., HM-ORD-1001) to view real-time delivery status.</p>
+      <div className="wp-card p-6 rounded-2xl space-y-4">
+        <h1 className="font-heading text-2xl font-bold text-slate-900">Track Your Shipment</h1>
+        <p className="text-xs text-slate-500">Enter your Order Number (e.g., HM-ORD-1001) to view live delivery status.</p>
 
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
@@ -95,51 +95,49 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
               placeholder="HM-ORD-1001"
               value={searchNumber}
               onChange={(e) => setSearchNumber(e.target.value)}
-              className="w-full bg-slate-800 text-white font-mono text-xs rounded-xl pl-9 pr-4 py-3 border border-slate-700 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-white text-slate-900 font-mono text-xs rounded-xl pl-9 pr-4 py-3 border border-slate-300 focus:outline-none focus:border-emerald-700"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-md shadow-emerald-950/40"
+            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-xs"
           >
             {loading ? 'Searching...' : 'Track'}
           </button>
         </form>
 
-        {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+        {error && <p className="text-xs text-red-600 font-medium">{error}</p>}
       </div>
 
       {order && (
-        <div className="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
-          {/* Header Info */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div className="wp-card p-6 sm:p-8 rounded-2xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
-              <span className="text-[10px] font-extrabold text-amber-400 uppercase tracking-wider">Order Found</span>
-              <h2 className="font-heading font-extrabold text-xl text-white">{order.order_number}</h2>
-              <p className="text-xs text-slate-400">Placed on {new Date(order.created_at).toLocaleDateString()}</p>
+              <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Order Status</span>
+              <h2 className="font-heading font-extrabold text-xl text-slate-900">{order.order_number}</h2>
+              <p className="text-xs text-slate-500">Placed on {new Date(order.created_at).toLocaleDateString()}</p>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
                 {order.order_status}
               </span>
               <button
                 onClick={() => alert(`Generating official PDF Invoice for ${order.invoice_number || order.order_number}...`)}
-                className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl transition-all"
+                className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-3 py-2 rounded-xl transition-all border border-slate-300"
               >
-                <FileText className="w-4 h-4 text-emerald-400" /> Invoice PDF
+                <FileText className="w-4 h-4 text-emerald-700" /> Download PDF Invoice
               </button>
             </div>
           </div>
 
-          {/* Status Timeline */}
           <div className="space-y-4">
-            <h3 className="font-heading font-bold text-sm text-white">Delivery Timeline</h3>
+            <h3 className="font-heading font-bold text-sm text-slate-900">Shipment Timeline</h3>
             <div className="grid grid-cols-4 gap-2 text-center relative">
               {[
-                { step: 1, title: 'Order Placed', icon: Clock },
+                { step: 1, title: 'Order Received', icon: Clock },
                 { step: 2, title: 'Processing', icon: Package },
                 { step: 3, title: 'Shipped', icon: Truck },
                 { step: 4, title: 'Delivered', icon: CheckCircle },
@@ -152,13 +150,13 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                         isComplete
-                          ? 'bg-emerald-600 border-emerald-400 text-white shadow-lg shadow-emerald-950/60 scale-105'
-                          : 'bg-slate-800 border-slate-700 text-slate-500'
+                          ? 'bg-emerald-700 border-emerald-700 text-white shadow-md scale-105'
+                          : 'bg-slate-100 border-slate-300 text-slate-400'
                       }`}
                     >
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className={`text-[11px] font-bold ${isComplete ? 'text-white' : 'text-slate-500'}`}>
+                    <span className={`text-[11px] font-bold ${isComplete ? 'text-slate-900' : 'text-slate-400'}`}>
                       {s.title}
                     </span>
                   </div>
@@ -167,38 +165,36 @@ export const OrderTrackView: React.FC<OrderTrackViewProps> = ({ initialOrderNumb
             </div>
           </div>
 
-          {/* Courier Details */}
           {order.tracking_number && (
-            <div className="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Assigned Logistics Partner</span>
-                <p className="font-heading font-bold text-sm text-white">{order.courier_name || 'Express Courier'}</p>
-                <p className="text-xs text-amber-400 font-mono">AWB: {order.tracking_number}</p>
+                <span className="text-[10px] text-slate-500 font-bold uppercase">Logistics Partner</span>
+                <p className="font-heading font-bold text-sm text-slate-900">{order.courier_name || 'Express Courier'}</p>
+                <p className="text-xs text-amber-700 font-mono font-bold">AWB: {order.tracking_number}</p>
               </div>
               {order.tracking_url && (
                 <a
                   href={order.tracking_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all"
+                  className="flex items-center gap-1 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all"
                 >
-                  Live Courier Map <ExternalLink className="w-3.5 h-3.5" />
+                  Live Courier Tracking <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               )}
             </div>
           )}
 
-          {/* Order Items Table */}
           <div className="space-y-3">
-            <h3 className="font-heading font-bold text-sm text-white">Items in this Package</h3>
+            <h3 className="font-heading font-bold text-sm text-slate-900">Items Summary</h3>
             <div className="space-y-2">
               {order.items?.map((it, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/40 text-xs">
+                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                   <div>
-                    <p className="font-bold text-white">{it.product_title}</p>
-                    <span className="text-[11px] text-slate-400">{it.variant_name} x {it.quantity}</span>
+                    <p className="font-bold text-slate-900">{it.product_title}</p>
+                    <span className="text-[11px] text-slate-500">{it.variant_name} x {it.quantity}</span>
                   </div>
-                  <span className="font-extrabold text-white">₹{it.total_price || it.price * it.quantity}</span>
+                  <span className="font-extrabold text-slate-900">₹{it.total_price || it.price * it.quantity}</span>
                 </div>
               ))}
             </div>

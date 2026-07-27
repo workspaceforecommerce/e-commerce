@@ -21,7 +21,7 @@ import { CloudinaryUpload } from '../components/CloudinaryUpload';
 
 export const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'abandoned' | 'cms' | 'api-logs'>('overview');
-  
+
   const [stats, setStats] = useState({
     total_sales: 145890.00,
     total_orders: 124,
@@ -40,10 +40,9 @@ export const AdminView: React.FC = () => {
 
   const [notificationMsg, setNotificationMsg] = useState('');
 
-  // Fetch admin data
   const loadAdminData = async () => {
     try {
-      const [statsRes, prodsRes, ordsRes, cartsRes, revsRes, logsRes] = await Promise.all([
+      const [statsRes, prodsRes, ordsRes, cartsRes, revsRes, logsRes]: [any, any, any, any, any, any] = await Promise.all([
         fetch('/api/admin/dashboard-stats').then(r => r.json()),
         fetch('/api/admin/products').then(r => r.json()),
         fetch('/api/admin/orders').then(r => r.json()),
@@ -112,36 +111,36 @@ export const AdminView: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-6 rounded-3xl">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 wp-card p-6 rounded-2xl bg-white">
         <div>
-          <span className="text-[10px] font-extrabold text-amber-400 uppercase tracking-widest">Management System</span>
-          <h1 className="font-heading text-2xl font-extrabold text-white">Healthy Monks Admin Control</h1>
+          <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">WordPress Dashboard</span>
+          <h1 className="font-heading text-2xl font-extrabold text-slate-900">Healthy Monks Admin Control Panel</h1>
         </div>
 
         <button
           onClick={loadAdminData}
-          className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition-all"
+          className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-slate-300"
         >
-          <RefreshCcw className="w-4 h-4 text-emerald-400" /> Refresh Data
+          <RefreshCcw className="w-4 h-4 text-emerald-700" /> Refresh Admin Data
         </button>
       </div>
 
       {notificationMsg && (
-        <div className="bg-emerald-950/80 border border-emerald-700 text-emerald-300 text-xs px-4 py-3 rounded-2xl flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-emerald-400" /> {notificationMsg}
+        <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs px-4 py-3 rounded-xl flex items-center gap-2 font-semibold">
+          <CheckCircle className="w-4 h-4 text-emerald-700" /> {notificationMsg}
         </div>
       )}
 
-      {/* Admin Tabs Bar */}
+      {/* Tabs */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
           { id: 'products', label: 'Product Master', icon: Package },
           { id: 'orders', label: 'Order Master', icon: ShoppingBag },
           { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
-          { id: 'cms', label: 'Website CMS & Reviews', icon: Sliders },
-          { id: 'api-logs', label: 'API Integrations & Push', icon: Send },
+          { id: 'cms', label: 'CMS & Reviews', icon: Sliders },
+          { id: 'api-logs', label: 'API & Push Logs', icon: Send },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -149,10 +148,10 @@ export const AdminView: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
                 isActive
-                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-950/60'
-                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
+                  : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
               }`}
             >
               <Icon className="w-4 h-4" /> {tab.label}
@@ -161,119 +160,109 @@ export const AdminView: React.FC = () => {
         })}
       </div>
 
-      {/* Tab 1: Overview */}
+      {/* Overview Tab */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
-          {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="glass-card p-5 rounded-2xl space-y-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Total Sales Revenue</span>
+            <div className="wp-card p-5 rounded-2xl space-y-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Sales Revenue</span>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-extrabold text-white">₹{stats.total_sales.toLocaleString()}</span>
-                <DollarSign className="w-6 h-6 text-emerald-400" />
+                <span className="text-2xl font-extrabold text-slate-900">₹{stats.total_sales.toLocaleString()}</span>
+                <DollarSign className="w-6 h-6 text-emerald-700" />
               </div>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl space-y-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Total Orders</span>
+            <div className="wp-card p-5 rounded-2xl space-y-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Total Orders</span>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-extrabold text-white">{stats.total_orders}</span>
-                <ShoppingBag className="w-6 h-6 text-amber-400" />
+                <span className="text-2xl font-extrabold text-slate-900">{stats.total_orders}</span>
+                <ShoppingBag className="w-6 h-6 text-amber-600" />
               </div>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl space-y-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Pending Processing</span>
+            <div className="wp-card p-5 rounded-2xl space-y-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Pending Processing</span>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-extrabold text-amber-400">{stats.pending_orders}</span>
-                <Clock className="w-6 h-6 text-amber-400" />
+                <span className="text-2xl font-extrabold text-amber-600">{stats.pending_orders}</span>
+                <Clock className="w-6 h-6 text-amber-600" />
               </div>
             </div>
 
-            <div className="glass-card p-5 rounded-2xl space-y-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Low Stock Alerts</span>
+            <div className="wp-card p-5 rounded-2xl space-y-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase">Low Stock Warnings</span>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-extrabold text-red-400">{stats.low_stock_products}</span>
-                <AlertTriangle className="w-6 h-6 text-red-400" />
+                <span className="text-2xl font-extrabold text-red-600">{stats.low_stock_products}</span>
+                <AlertTriangle className="w-6 h-6 text-red-600" />
               </div>
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="glass-card p-6 rounded-3xl space-y-4">
-            <h3 className="font-heading font-bold text-base text-white">Quick System Status</h3>
+          <div className="wp-card p-6 rounded-2xl space-y-4">
+            <h3 className="font-heading font-bold text-base text-slate-900">System Architecture Overview</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-              <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                <span className="font-bold text-emerald-400">Database Engine</span>
-                <p className="text-slate-300 mt-1">Cloudflare D1 SQL (ID: ce356b20...)</p>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-bold text-emerald-800">Database Engine</span>
+                <p className="text-slate-600 mt-1">Cloudflare D1 SQL (ID: ce356b20...)</p>
               </div>
-              <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                <span className="font-bold text-emerald-400">PWA Manifest</span>
-                <p className="text-slate-300 mt-1">Active - Standalone Mode Enabled</p>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-bold text-emerald-800">Media Provider</span>
+                <p className="text-slate-600 mt-1">Cloudinary Signed Uploads (Cloud: hfx4iebd)</p>
               </div>
-              <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                <span className="font-bold text-emerald-400">Git Repository Sync</span>
-                <p className="text-slate-300 mt-1">workspaceforecommerce/e-commerce</p>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-bold text-emerald-800">Target Worker & Pages</span>
+                <p className="text-slate-600 mt-1">e-commerce (Workers & Pages)</p>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Tab 2: Product Master */}
+      {/* Products Tab */}
       {activeTab === 'products' && (
-        <div className="glass-card p-6 rounded-3xl space-y-6">
+        <div className="wp-card p-6 rounded-2xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 className="font-heading font-bold text-lg text-white">Product Master Catalog</h2>
-              <p className="text-xs text-slate-400">Upload images directly to Cloudinary & manage inventory</p>
+              <h2 className="font-heading font-bold text-lg text-slate-900">Product Master Catalog</h2>
+              <p className="text-xs text-slate-500">Upload images directly to Cloudinary & manage catalog</p>
             </div>
             <button
-              onClick={() => alert('Add New Product Modal - Upload images using Cloudinary Uploader below!')}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-md shadow-emerald-950/40 shrink-0"
+              onClick={() => alert('Add New Product Modal')}
+              className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
             >
               <Plus className="w-4 h-4" /> Add Product
             </button>
           </div>
 
-          {/* Cloudinary Upload Section */}
           <CloudinaryUpload
-            onUploadSuccess={(url) => showNotice(`Image uploaded to Cloudinary: ${url}`)}
+            onUploadSuccess={(url) => showNotice(`Uploaded to Cloudinary: ${url}`)}
           />
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-900 text-slate-400 font-bold uppercase">
+            <table className="w-full text-left text-xs text-slate-700">
+              <thead className="bg-slate-100 text-slate-900 font-bold uppercase border-b border-slate-200">
                 <tr>
                   <th className="p-3">SKU</th>
                   <th className="p-3">Product Name</th>
                   <th className="p-3">Category</th>
                   <th className="p-3">Price</th>
                   <th className="p-3">Stock</th>
-                  <th className="p-3">Tags</th>
                   <th className="p-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-slate-200">
                 {products.map((p) => (
-                  <tr key={p.id} className="hover:bg-slate-800/40">
-                    <td className="p-3 font-mono text-amber-400">{p.sku}</td>
-                    <td className="p-3 font-bold text-white">{p.title}</td>
-                    <td className="p-3 text-emerald-400">{p.category_name}</td>
-                    <td className="p-3">₹{p.discount_price || p.base_price}</td>
+                  <tr key={p.id} className="hover:bg-slate-50">
+                    <td className="p-3 font-mono font-bold text-amber-700">{p.sku}</td>
+                    <td className="p-3 font-bold text-slate-900">{p.title}</td>
+                    <td className="p-3 text-emerald-800 font-semibold">{p.category_name}</td>
+                    <td className="p-3 font-extrabold text-slate-900">₹{p.discount_price || p.base_price}</td>
                     <td className="p-3">
-                      <span className={`font-bold ${p.stock_quantity < 10 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      <span className={`font-bold ${p.stock_quantity < 10 ? 'text-red-600' : 'text-emerald-700'}`}>
                         {p.stock_quantity}
                       </span>
                     </td>
                     <td className="p-3">
-                      <div className="flex gap-1">
-                        {p.is_featured === 1 && <span className="bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded text-[9px]">Featured</span>}
-                        {p.is_bestseller === 1 && <span className="bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded text-[9px]">Bestseller</span>}
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <span className="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                      <span className="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                         {p.status}
                       </span>
                     </td>
@@ -285,14 +274,14 @@ export const AdminView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 3: Order Master */}
+      {/* Orders Tab */}
       {activeTab === 'orders' && (
-        <div className="glass-card p-6 rounded-3xl space-y-4">
-          <h2 className="font-heading font-bold text-lg text-white">Order Master Management</h2>
+        <div className="wp-card p-6 rounded-2xl space-y-4">
+          <h2 className="font-heading font-bold text-lg text-slate-900">WooCommerce Order Master</h2>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-900 text-slate-400 font-bold uppercase">
+            <table className="w-full text-left text-xs text-slate-700">
+              <thead className="bg-slate-100 text-slate-900 font-bold uppercase border-b border-slate-200">
                 <tr>
                   <th className="p-3">Order #</th>
                   <th className="p-3">Customer</th>
@@ -302,18 +291,18 @@ export const AdminView: React.FC = () => {
                   <th className="p-3">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-slate-200">
                 {orders.map((o) => (
-                  <tr key={o.id} className="hover:bg-slate-800/40">
-                    <td className="p-3 font-mono font-bold text-white">{o.order_number}</td>
+                  <tr key={o.id} className="hover:bg-slate-50">
+                    <td className="p-3 font-mono font-bold text-slate-900">{o.order_number}</td>
                     <td className="p-3">
-                      <p className="font-semibold text-white">{o.customer_name}</p>
-                      <span className="text-[10px] text-slate-400">{o.customer_phone}</span>
+                      <p className="font-bold text-slate-900">{o.customer_name}</p>
+                      <span className="text-[10px] text-slate-500">{o.customer_phone}</span>
                     </td>
-                    <td className="p-3 uppercase font-bold text-amber-400">{o.payment_method}</td>
-                    <td className="p-3 font-extrabold text-white">₹{o.total_amount}</td>
+                    <td className="p-3 uppercase font-bold text-amber-700">{o.payment_method}</td>
+                    <td className="p-3 font-extrabold text-slate-900">₹{o.total_amount}</td>
                     <td className="p-3">
-                      <span className="bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full text-[10px] font-bold">
+                      <span className="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                         {o.order_status}
                       </span>
                     </td>
@@ -321,13 +310,13 @@ export const AdminView: React.FC = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleUpdateOrderStatus(o.id, 'Shipped')}
-                          className="bg-emerald-600 text-white font-bold text-[10px] px-2 py-1 rounded-lg hover:bg-emerald-500"
+                          className="bg-emerald-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg hover:bg-emerald-800"
                         >
                           Mark Shipped
                         </button>
                         <button
                           onClick={() => handleUpdateOrderStatus(o.id, 'Delivered')}
-                          className="bg-blue-600 text-white font-bold text-[10px] px-2 py-1 rounded-lg hover:bg-blue-500"
+                          className="bg-blue-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg hover:bg-blue-700"
                         >
                           Mark Delivered
                         </button>
@@ -341,24 +330,23 @@ export const AdminView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 4: Abandoned Carts */}
+      {/* Abandoned Carts */}
       {activeTab === 'abandoned' && (
-        <div className="glass-card p-6 rounded-3xl space-y-4">
-          <h2 className="font-heading font-bold text-lg text-white">Abandoned Cart Tracking & Reminders</h2>
-          <p className="text-xs text-slate-400">Trigger automated SMS and WhatsApp recovery campaigns for unpaid sessions.</p>
+        <div className="wp-card p-6 rounded-2xl space-y-4">
+          <h2 className="font-heading font-bold text-lg text-slate-900">Abandoned Cart Recovery</h2>
 
           <div className="space-y-3">
             {abandonedCarts.map((c) => (
-              <div key={c.id} className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <div key={c.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
                 <div>
-                  <p className="font-bold text-white text-xs">{c.customer_phone} ({c.customer_email})</p>
-                  <span className="text-[11px] text-amber-400">Reminders Sent: {c.reminder_count}</span>
+                  <p className="font-bold text-slate-900">{c.customer_phone} ({c.customer_email})</p>
+                  <span className="text-[11px] text-amber-700 font-medium">Reminders Sent: {c.reminder_count}</span>
                 </div>
                 <button
                   onClick={() => handleSendReminder(c.id)}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all"
+                  className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
                 >
-                  <Send className="w-3.5 h-3.5" /> Send Reminder SMS/WhatsApp
+                  <Send className="w-3.5 h-3.5" /> Trigger WhatsApp / SMS Reminder
                 </button>
               </div>
             ))}
@@ -366,26 +354,26 @@ export const AdminView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 5: CMS & Reviews */}
+      {/* CMS & Reviews */}
       {activeTab === 'cms' && (
-        <div className="glass-card p-6 rounded-3xl space-y-6">
-          <h2 className="font-heading font-bold text-lg text-white">Customer Reviews Moderation</h2>
+        <div className="wp-card p-6 rounded-2xl space-y-4">
+          <h2 className="font-heading font-bold text-lg text-slate-900">Customer Review Moderation</h2>
 
           <div className="space-y-3">
             {reviews.map((r) => (
-              <div key={r.id} className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 flex items-center justify-between text-xs">
+              <div key={r.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">{r.customer_name}</span>
-                    <span className="text-amber-400">{'★'.repeat(r.rating)}</span>
+                    <span className="font-bold text-slate-900">{r.customer_name}</span>
+                    <span className="text-amber-500">{'★'.repeat(r.rating)}</span>
                   </div>
-                  <p className="text-slate-300 italic mt-1 font-normal">"{r.comment}"</p>
+                  <p className="text-slate-600 italic mt-1 font-normal">"{r.comment}"</p>
                 </div>
 
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleReviewStatus(r.id, 'approved')}
-                    className="bg-emerald-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1"
+                    className="bg-emerald-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1"
                   >
                     <CheckCircle className="w-3 h-3" /> Approve
                   </button>
@@ -402,20 +390,20 @@ export const AdminView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 6: API Logs */}
+      {/* API & Push Logs */}
       {activeTab === 'api-logs' && (
-        <div className="glass-card p-6 rounded-3xl space-y-4">
-          <h2 className="font-heading font-bold text-lg text-white">API Integration Logs (SMS, WhatsApp, Push)</h2>
+        <div className="wp-card p-6 rounded-2xl space-y-4">
+          <h2 className="font-heading font-bold text-lg text-slate-900">API Notification Logs</h2>
 
           <div className="space-y-2 font-mono text-xs">
             {apiLogs.map((l) => (
-              <div key={l.id} className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div key={l.id} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
                 <div>
-                  <span className="font-bold text-emerald-400">[{l.service_name}]</span>{' '}
-                  <span className="text-amber-400">{l.event_type}</span> to <span className="text-white">{l.recipient}</span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">{l.payload}</p>
+                  <span className="font-bold text-emerald-800">[{l.service_name}]</span>{' '}
+                  <span className="text-amber-700 font-bold">{l.event_type}</span> to <span className="text-slate-900">{l.recipient}</span>
+                  <p className="text-[10px] text-slate-500 mt-0.5">{l.payload}</p>
                 </div>
-                <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2 py-0.5 rounded font-bold">
+                <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">
                   {l.response_status}
                 </span>
               </div>

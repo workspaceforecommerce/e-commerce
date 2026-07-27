@@ -101,7 +101,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, cartTotal: subtotal }),
       });
-      const data = await res.json();
+      const data: any = await res.json();
       if (data.success) {
         setAppliedCoupon(data.coupon);
         return { success: true };

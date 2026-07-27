@@ -26,7 +26,7 @@ export const AppContent: React.FC = () => {
     // Fetch categories & products from Workers API Engine or fallback
     const fetchData = async () => {
       try {
-        const [catRes, prodRes] = await Promise.all([
+        const [catRes, prodRes]: [any, any] = await Promise.all([
           fetch('/api/categories').then((r) => r.json()),
           fetch('/api/products').then((r) => r.json()),
         ]);
@@ -55,7 +55,7 @@ export const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-emerald-700 selection:text-white">
       <div>
         {/* PWA Install Alert */}
         <InstallPwaBanner />
@@ -66,6 +66,8 @@ export const AppContent: React.FC = () => {
           setActiveTab={setActiveTab}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          categories={categories}
+          onSelectCategory={handleSelectCategory}
         />
 
         {/* Main View Router */}
@@ -124,11 +126,53 @@ export const AppContent: React.FC = () => {
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-900/80 py-8 px-4 text-xs text-slate-400 text-center space-y-2">
-        <p className="font-heading font-bold text-white text-sm">Healthy Monks PWA Application</p>
-        <p>Hosted on Cloudflare Pages / Workers & Powered by Cloudflare D1 Database (<code className="text-amber-400 font-mono">ce356b20-7e8e-4ddc-8df3-bcf58441e306</code>)</p>
-        <p className="text-[11px] text-slate-500">Repository: github.com/workspaceforecommerce/e-commerce</p>
+      {/* WordPress WooCommerce Footer */}
+      <footer className="border-t border-slate-200 bg-white pt-10 pb-8 px-4 text-xs text-slate-600 mt-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="space-y-3">
+            <span className="font-heading font-extrabold text-lg text-slate-900 block">Healthy Monks</span>
+            <p className="text-slate-500 leading-relaxed">100% Certified Organic & Authentic Ayurvedic Formulations Sourced Directly from Himalayan Farms.</p>
+            <span className="inline-block bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded border border-emerald-200">
+              FSSAI & Ayush Ministry Approved
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-heading font-bold text-slate-900 text-sm">Product Categories</h4>
+            <ul className="space-y-1.5 text-slate-600">
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Immunity Boosters</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Organic Teas & Infusions</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Ayurvedic Churna & Powders</button></li>
+              <li><button onClick={() => setActiveTab('shop')} className="hover:text-emerald-700">Superfoods & Raw Seeds</button></li>
+            </ul>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-heading font-bold text-slate-900 text-sm">Customer Care</h4>
+            <ul className="space-y-1.5 text-slate-600">
+              <li><button onClick={() => setActiveTab('track')} className="hover:text-emerald-700">Track Order Status</button></li>
+              <li><span>Shipping & Delivery Policy</span></li>
+              <li><span>7-Day Return Guarantee</span></li>
+              <li><span>Terms & Privacy Policy</span></li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="font-heading font-bold text-slate-900 text-sm">Payment Methods</h4>
+            <div className="flex flex-wrap gap-2 text-[11px] font-semibold text-slate-700">
+              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">Cash on Delivery</span>
+              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">UPI / QR</span>
+              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">Cards</span>
+              <span className="px-2 py-1 bg-slate-100 rounded border border-slate-200">NetBanking</span>
+            </div>
+            <p className="text-[11px] text-slate-500">Secure SSL Encrypted Checkout</p>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto border-t border-slate-100 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+          <p>© 2026 Healthy Monks WooCommerce PWA. All rights reserved.</p>
+          <p>Powered by Cloudflare D1 SQL Database & Cloudflare Pages</p>
+        </div>
       </footer>
 
       {/* Mobile Bottom Tab Navigation */}

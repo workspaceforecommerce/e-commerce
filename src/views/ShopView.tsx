@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Filter, Search, SlidersHorizontal } from 'lucide-react';
+import { Filter, Search, SlidersHorizontal, Leaf } from 'lucide-react';
 import { Category, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
 
@@ -45,20 +45,19 @@ export const ShopView: React.FC<ShopViewProps> = ({
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Shop Header & Filter Control */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-4 rounded-2xl">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 wp-card p-5 rounded-2xl">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-white">Ayurvedic & Organic Catalog</h1>
-          <p className="text-xs text-slate-400">Showing {filtered.length} healthy formulations</p>
+          <h1 className="font-heading text-2xl font-bold text-slate-900">Shop Organic Catalog</h1>
+          <p className="text-xs text-slate-500">Showing {filtered.length} herbal formulations</p>
         </div>
 
-        {/* Sorting Dropdown */}
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-4 h-4 text-emerald-400" />
+          <SlidersHorizontal className="w-4 h-4 text-emerald-700" />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-slate-800 text-slate-200 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:border-emerald-500"
+            className="bg-white text-slate-800 text-xs rounded-xl px-3 py-2 border border-slate-300 focus:outline-none focus:border-emerald-700"
           >
             <option value="default">Sort by: Default</option>
             <option value="price-low">Price: Low to High</option>
@@ -67,54 +66,66 @@ export const ShopView: React.FC<ShopViewProps> = ({
         </div>
       </div>
 
-      {/* Category Horizontal Pill Filters */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        <button
-          onClick={() => onSelectCategory(null)}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-            selectedCategoryId === null
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40'
-              : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
-          }`}
-        >
-          All Products
-        </button>
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => onSelectCategory(cat.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategoryId === cat.id
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40'
-                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
-            }`}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* WooCommerce Categories Sidebar */}
+        <aside className="space-y-4">
+          <div className="wp-card p-5 rounded-2xl space-y-3">
+            <h3 className="font-heading font-bold text-sm text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
+              <Leaf className="w-4 h-4 text-emerald-700" /> Product Categories
+            </h3>
 
-      {/* Product Grid */}
-      {filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-12 text-center space-y-3">
-          <p className="text-slate-400 text-sm">No products found matching your filter criteria.</p>
-          <button
-            onClick={() => {
-              onSelectCategory(null);
-              setSearchQuery('');
-            }}
-            className="text-xs font-bold text-emerald-400 underline"
-          >
-            Clear Filters & View All
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} onSelect={onSelectProduct} />
-          ))}
-        </div>
-      )}
+            <div className="space-y-1 text-xs font-semibold">
+              <button
+                onClick={() => onSelectCategory(null)}
+                className={`w-full text-left py-2 px-3 rounded-xl transition-all ${
+                  selectedCategoryId === null
+                    ? 'bg-emerald-700 text-white shadow-xs'
+                    : 'text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                All Products ({products.length})
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => onSelectCategory(cat.id)}
+                  className={`w-full text-left py-2 px-3 rounded-xl transition-all ${
+                    selectedCategoryId === cat.id
+                      ? 'bg-emerald-700 text-white shadow-xs'
+                      : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Product Grid */}
+        <main className="lg:col-span-3">
+          {filtered.length === 0 ? (
+            <div className="wp-card rounded-2xl p-12 text-center space-y-3">
+              <p className="text-slate-500 text-sm">No products found matching your filter criteria.</p>
+              <button
+                onClick={() => {
+                  onSelectCategory(null);
+                  setSearchQuery('');
+                }}
+                className="text-xs font-bold text-emerald-700 underline"
+              >
+                Clear Filters & View All
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtered.map((product) => (
+                <ProductCard key={product.id} product={product} onSelect={onSelectProduct} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 };

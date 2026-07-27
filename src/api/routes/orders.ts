@@ -74,7 +74,7 @@ ordersApp.post('/', async (c) => {
     [
       orderNumber, customer_name, customer_email, customer_phone, shipping_address,
       city, pincode, payment_method, payment_status, order_status, subtotal,
-      discount_amount, coupon_code || null, shipping_fee, total_amount, invoice_number, notes || null
+      discount_amount, coupon_code || null, shipping_fee, total_amount, invoiceNumber, notes || null
     ]
   );
 
