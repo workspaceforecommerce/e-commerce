@@ -17,6 +17,7 @@ import {
   FileText
 } from 'lucide-react';
 import { Product, Order, AbandonedCart, ApiLog, Review, Banner } from '../types';
+import { CloudinaryUpload } from '../components/CloudinaryUpload';
 
 export const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'abandoned' | 'cms' | 'api-logs'>('overview');
@@ -221,16 +222,24 @@ export const AdminView: React.FC = () => {
 
       {/* Tab 2: Product Master */}
       {activeTab === 'products' && (
-        <div className="glass-card p-6 rounded-3xl space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-heading font-bold text-lg text-white">Product Master Catalog</h2>
+        <div className="glass-card p-6 rounded-3xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="font-heading font-bold text-lg text-white">Product Master Catalog</h2>
+              <p className="text-xs text-slate-400">Upload images directly to Cloudinary & manage inventory</p>
+            </div>
             <button
-              onClick={() => alert('Add New Product Modal - Category, SKU, Images, Variants & Price calculator')}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all"
+              onClick={() => alert('Add New Product Modal - Upload images using Cloudinary Uploader below!')}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-md shadow-emerald-950/40 shrink-0"
             >
               <Plus className="w-4 h-4" /> Add Product
             </button>
           </div>
+
+          {/* Cloudinary Upload Section */}
+          <CloudinaryUpload
+            onUploadSuccess={(url) => showNotice(`Image uploaded to Cloudinary: ${url}`)}
+          />
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-300">
