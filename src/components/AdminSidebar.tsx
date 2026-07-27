@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import {
-  LayoutDashboard,
-  Package,
-  FolderTree,
-  ShoppingBag,
-  Clock,
-  Sliders,
-  Send,
-  Users,
-  ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
-  LogOut,
-  Sparkles,
-  MessageSquare,
-  Activity,
-  Images
+  LayoutDashboard, Package, FolderTree, ShoppingBag, Clock, Sliders,
+  Send, Users, ShieldCheck, ChevronLeft, ChevronRight, LogOut,
+  Sparkles, MessageSquare, Activity, Images, Tag
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -32,6 +19,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'products', label: 'Product Catalog', icon: Package },
     { id: 'categories', label: 'Categories & Tree', icon: FolderTree },
     { id: 'variants', label: 'Variants & Attributes', icon: Sliders },
+    { id: 'brands', label: 'Brands & Collections', icon: Tag },
     { id: 'media', label: 'Media Library', icon: Images },
     { id: 'orders', label: 'Order Fulfillment', icon: ShoppingBag },
     { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },

@@ -11,6 +11,7 @@ import usersApp from './routes/users';
 import dashboardApp from './routes/dashboard';
 import { variantApp } from './routes/variants';
 import mediaApp from './routes/media';
+import { brandsApp, mfgApp, collectionsApp } from './routes/brands';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -54,6 +55,8 @@ app.route('/api/orders', ordersApp);
 app.route('/api/admin', adminApp);
 app.route('/api/cloudinary', cloudinaryApp);
 app.route('/api/media', mediaApp);
+app.route('/api/brands', brandsApp);
+app.route('/api/manufacturers', mfgApp);
+app.route('/api/collections', collectionsApp);
 
 export default app;
-

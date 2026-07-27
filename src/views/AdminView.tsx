@@ -28,12 +28,13 @@ import { AdminHeader } from '../components/AdminHeader';
 import { DashboardHomeView } from './DashboardHomeView';
 import { VariantManagementView } from './VariantManagementView';
 import { MediaLibraryView } from './MediaLibraryView';
+import { BrandsView } from './BrandsView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -366,6 +367,9 @@ export const AdminView: React.FC = () => {
 
           {/* 4E. Media Library */}
           {activeTab === 'media' && <MediaLibraryView />}
+
+          {/* 4F. Brands, Manufacturers & Collections */}
+          {activeTab === 'brands' && <BrandsView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
