@@ -41,6 +41,7 @@ import { StaffRbacManagementView } from './StaffRbacManagementView';
 import { SupportHelpDeskView } from './SupportHelpDeskView';
 import { LoyaltyRewardsWalletView } from './LoyaltyRewardsWalletView';
 import { CustomerAnalyticsSegmentationView } from './CustomerAnalyticsSegmentationView';
+import { CmsCoreManagementView } from './CmsCoreManagementView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
@@ -419,35 +420,8 @@ export const AdminView: React.FC = () => {
           {/* 6B. Staff, Admin Users, Roles & Permissions (RBAC) */}
           {activeTab === 'users-rbac' && <StaffRbacManagementView />}
 
-          {/* 4. CMS & Banner Manager */}
-          {activeTab === 'cms' && (
-            <div className="wp-card p-6 rounded-2xl space-y-6 bg-white animate-fade-in">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                <div>
-                  <h2 className="font-heading font-bold text-lg text-slate-900">CMS & Homepage Banners</h2>
-                  <p className="text-xs text-slate-500">Manage hero slider images and store promotion banners</p>
-                </div>
-                <Button variant="primary" size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setIsAddBannerOpen(true)}>
-                  Add New Banner
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {banners.map((b) => (
-                  <div key={b.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                    <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-200 border border-slate-300">
-                      <img src={b.image_url} alt={b.title} className="w-full h-full object-cover" />
-                    </div>
-                    <h4 className="font-heading font-bold text-sm text-slate-900">{b.title}</h4>
-                    <p className="text-xs text-slate-500">{b.subtitle}</p>
-                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded inline-block">
-                      Section: {b.section}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* 7A. Enterprise CMS Core */}
+          {activeTab === 'cms' && <CmsCoreManagementView />}
 
           {/* 5. Users & RBAC */}
           {activeTab === 'users-rbac' && <UserManagementView />}
