@@ -47,6 +47,43 @@ app.use('*', cors({
   allowHeaders: ['Content-Type', 'Authorization'],
 }));
 
+// Root Engine Endpoint
+app.get('/', (c) => {
+  return c.json({
+    success: true,
+    name: 'Healthy Monks Enterprise E-Commerce API Engine',
+    version: '1.0.0',
+    status: 'online',
+    database: 'Cloudflare D1 SQL (Healthy Monks D1 Database)',
+    cloudinary: 'Configured (Cloud: hfx4iebd)',
+    endpoints: {
+      health: '/api/health',
+      products: '/api/products',
+      categories: '/api/categories',
+      orders: '/api/orders',
+      customers: '/api/customers',
+      staff: '/api/staff',
+      tickets: '/api/tickets',
+      loyalty: '/api/loyalty',
+      analytics: '/api/analytics',
+      payments: '/api/payments',
+      shipping: '/api/shipping',
+      returns: '/api/returns',
+      invoices: '/api/invoices',
+      notifications: '/api/notifications'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/api', (c) => {
+  return c.json({
+    success: true,
+    message: 'Healthy Monks E-Commerce REST API Engine',
+    health: '/api/health'
+  });
+});
+
 // Health Check
 app.get('/api/health', (c) => {
   return c.json({
