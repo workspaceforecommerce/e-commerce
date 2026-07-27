@@ -1,17 +1,16 @@
-const CACHE_NAME = 'healthymonks-pwa-v1';
+const CACHE_NAME = 'healthymonks-pwa-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg'
+  '/_routes.json'
 ];
 
 // Install Event
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Service Worker] Caching App Shell');
+      console.log('[Service Worker] Caching App Shell & Manifest');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
@@ -35,9 +34,8 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event (Stale-While-Revalidate Strategy for API & Assets)
+// Fetch Event (Stale-While-Revalidate Strategy for API & Static Assets)
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests or browser extension requests
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
   event.respondWith(
@@ -53,7 +51,6 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // If network fails, return cached response if present
           return cachedResponse;
         });
 
@@ -64,7 +61,7 @@ self.addEventListener('fetch', (event) => {
 
 // Push Notification Event Listener
 self.addEventListener('push', (event) => {
-  let data = { title: 'Healthy Monks Alert', body: 'New wellness offers available!' };
+  let data = { title: 'Healthy Monks Alert', body: 'New wellness offers & order updates available!' };
   if (event.data) {
     try {
       data = event.data.json();
@@ -75,8 +72,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/icon-192.svg',
-    badge: '/icon-192.svg',
+    icon: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=192&q=80',
+    badge: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=192&q=80',
     vibrate: [100, 50, 100],
     data: {
       url: data.url || '/'
