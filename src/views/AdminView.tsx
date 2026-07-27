@@ -31,6 +31,7 @@ import { MediaLibraryView } from './MediaLibraryView';
 import { BrandsView } from './BrandsView';
 import { ReviewsView } from './ReviewsView';
 import { CouponManagementView } from './CouponManagementView';
+import { OrderManagementView } from './OrderManagementView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
@@ -378,6 +379,9 @@ export const AdminView: React.FC = () => {
 
           {/* 4H. Coupons, Discounts & Promotion Engine */}
           {activeTab === 'coupons' && <CouponManagementView />}
+
+          {/* 5C. Order Management */}
+          {activeTab === 'orders' && <OrderManagementView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
