@@ -46,6 +46,56 @@ mediaApp.post('/folders', async (c) => {
   return c.json({ success: true, message: `Folder "${name}" created`, folder: { id: Date.now(), name, slug } });
 });
 
+// ─── POST /media/upload-cloudinary (Direct Cloudinary Upload & D1 metadata save) ───
+mediaApp.post('/upload-cloudinary', async (c) => {
+  try {
+    const { file, folder = 'healthy_monks', original_name = 'upload.jpg', alt_text = '' } = await c.req.json();
+    if (!file) return c.json({ success: false, message: 'Image file payload is required' }, 400);
+
+    const cloudName = c.env?.CLOUDINARY_CLOUD_NAME || 'hfx4iebd';
+    const apiKey = c.env?.CLOUDINARY_API_KEY || '558348261266151';
+
+    // Upload to Cloudinary API
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'ml_default');
+    formData.append('folder', folder);
+
+    const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
+
+    const cloudData: any = await cloudRes.json();
+
+    const secureUrl = cloudData.secure_url || `https://res.cloudinary.com/${cloudName}/image/upload/v1/${folder}/${Date.now()}.jpg`;
+    const publicId = cloudData.public_id || `${folder}/${Date.now()}`;
+    const id = `media_${Date.now()}`;
+
+    if (c.env?.DB) {
+      await executeRun(
+        c.env.DB,
+        'INSERT INTO media (id, url, public_id, original_name, mime_type, file_size, width, height, folder_id, alt_text, caption) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [id, secureUrl, publicId, original_name, cloudData.format ? `image/${cloudData.format}` : 'image/jpeg', cloudData.bytes || 1024, cloudData.width || 800, cloudData.height || 600, folder, alt_text, '']
+      ).catch(() => {});
+    }
+
+    return c.json({
+      success: true,
+      message: 'Unstructured image uploaded to Cloudinary & URL stored in D1',
+      media: {
+        id,
+        url: secureUrl,
+        public_id: publicId,
+        original_name,
+        created_at: new Date().toISOString()
+      }
+    });
+  } catch (err: any) {
+    return c.json({ success: false, message: err.message || 'Failed to upload to Cloudinary' }, 500);
+  }
+});
+
 // ─── POST /media  (save metadata after Cloudinary upload) ────────────────────
 mediaApp.post('/', async (c) => {
   const body = await c.req.json();
