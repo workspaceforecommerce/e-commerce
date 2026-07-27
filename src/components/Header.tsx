@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Search, Download, ShieldCheck, LayoutDashboard, Leaf, Bell, Phone, Mail, User, Heart, ChevronDown } from 'lucide-react';
+import { Search, ShoppingBag, Heart, Phone, Mail, ShieldCheck, User, Menu, X, SlidersHorizontal } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { usePWA } from '../context/PWAContext';
 import { Category } from '../types';
 
 interface HeaderProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (tab: any) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  categories: Category[];
-  onSelectCategory: (id: number | null) => void;
+  categories?: Category[];
+  onSelectCategory?: (catId: number | null) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,210 +17,169 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   searchQuery,
   setSearchQuery,
-  categories,
-  onSelectCategory,
+  categories = [],
+  onSelectCategory = () => {},
 }) => {
-  const { cartCount, subtotal } = useCart();
-  const { isInstallable, promptInstall, isOnline, pushSubscribed, requestPushPermission } = usePWA();
-  const [showSearchMobile, setShowSearchMobile] = useState(false);
+  const { totalItems } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
-      {/* 1. WordPress Top Announcement Bar */}
-      <div className="wp-topbar py-1.5 px-4 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-4 text-[11px]">
-            <span className="flex items-center gap-1"><Phone className="w-3 h-3 text-emerald-300" /> +91 9876543210</span>
-            <span className="hidden md:flex items-center gap-1"><Mail className="w-3 h-3 text-emerald-300" /> support@healthymonks.com</span>
+      {/* 1. Top Announcement Bar */}
+      <div className="bg-emerald-800 text-white text-[11px] font-semibold py-2 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+          <div className="flex items-center gap-4 text-emerald-100 flex-wrap justify-center">
+            <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-amber-400" /> +91 98123 45678</span>
+            <span className="hidden md:flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-amber-400" /> support@healthymonks.com</span>
+            <span className="flex items-center gap-1 text-amber-300 font-bold"><ShieldCheck className="w-3.5 h-3.5" /> 100% Ayush Certified Organic</span>
           </div>
 
-          <div className="flex items-center gap-3 text-[11px]">
-            <span className="font-semibold text-amber-300">🌿 100% Certified Organic & Ayurvedic Remedies</span>
-            {!isOnline && (
-              <span className="bg-amber-500/20 text-amber-200 text-[10px] px-2 py-0.5 rounded border border-amber-400/30">
-                Offline Mode
-              </span>
-            )}
+          <div className="flex items-center gap-3 text-emerald-100">
+            <span className="bg-emerald-900/60 text-amber-300 px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-emerald-700">
+              FREE Shipping on Orders Over ₹499
+            </span>
+            <span className="text-[10px] text-slate-300 font-medium">Currency: INR (₹)</span>
           </div>
         </div>
       </div>
 
-      {/* 2. WordPress Main Brand & Search Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
-        {/* WordPress Logo */}
-        <button
-          onClick={() => setActiveTab('home')}
-          className="flex items-center gap-3 text-left focus:outline-none group"
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-800 to-green-600 p-0.5 shadow-md flex items-center justify-center text-white">
-            <Leaf className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-heading font-extrabold text-xl tracking-tight text-slate-900 group-hover:text-emerald-700 transition-colors">
-                Healthy <span className="text-emerald-700">Monks</span>
+      {/* 2. Main Brand Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 flex items-center justify-between gap-4">
+        {/* Brand Logo & Mobile Toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('home')}
+            className="flex items-center gap-2.5 text-left group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-emerald-700 flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-xs group-hover:bg-emerald-800 transition-all">
+              HM
+            </div>
+            <div>
+              <span className="font-heading font-extrabold text-lg sm:text-xl text-slate-900 leading-none block tracking-tight">
+                Healthy Monks
               </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-                WooCommerce PWA
+              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest block mt-0.5">
+                Ayurvedic Wellness PWA
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 hidden sm:block">Pure Wellness & Organic Store</p>
-          </div>
-        </button>
+          </button>
+        </div>
 
-        {/* WordPress Desktop Search Box */}
-        <div className="hidden lg:flex items-center relative flex-1 max-w-lg mx-6">
-          <div className="w-full flex items-center bg-slate-50 border border-slate-300 rounded-xl overflow-hidden focus-within:border-emerald-600 focus-within:ring-1 focus-within:ring-emerald-600 transition-all">
+        {/* Desktop Search Bar */}
+        <div className="hidden lg:flex flex-1 max-w-xl mx-8">
+          <div className="relative w-full">
             <input
               type="text"
-              placeholder="Search KSM-66 Ashwagandha, Green Tea, Triphala..."
+              placeholder="Search Ashwagandha, Tulsi Tea, Chyawanprash..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setActiveTab('shop')}
-              className="w-full text-slate-800 placeholder-slate-400 text-xs px-4 py-2.5 bg-transparent border-none focus:outline-none"
+              className="w-full bg-slate-50 text-slate-900 text-xs font-medium rounded-xl pl-4 pr-10 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-700 focus:bg-white transition-all shadow-2xs"
             />
             <button
               onClick={() => setActiveTab('shop')}
-              className="bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2.5 text-xs font-bold flex items-center gap-1 transition-colors"
+              className="absolute right-1 top-1 bottom-1 bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 rounded-lg flex items-center justify-center transition-all"
             >
-              <Search className="w-4 h-4" /> Search
+              <Search className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Right User Action Widgets */}
-        <div className="flex items-center gap-3">
-          {/* Mobile Search Icon */}
+        {/* Right Action Icons */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => {
-              setShowSearchMobile(!showSearchMobile);
-              setActiveTab('shop');
-            }}
-            className="lg:hidden p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200"
+            onClick={() => setActiveTab('shop')}
+            className="hidden sm:flex items-center gap-1.5 p-2 px-3 rounded-xl hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all"
           >
-            <Search className="w-5 h-5" />
+            <Heart className="w-4 h-4 text-emerald-700" />
+            <span className="hidden xl:inline">Wishlist</span>
           </button>
 
-          {/* PWA Install Button */}
-          {isInstallable && (
-            <button
-              onClick={promptInstall}
-              className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs transition-all"
-            >
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Install PWA App</span>
-            </button>
-          )}
-
-          {/* Push Alerts */}
-          <button
-            onClick={requestPushPermission}
-            title={pushSubscribed ? 'Alerts Active' : 'Enable Push Notifications'}
-            className={`p-2 rounded-xl border text-xs transition-all ${
-              pushSubscribed
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                : 'bg-slate-50 text-slate-500 border-slate-200 hover:text-emerald-700'
-            }`}
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-
-          {/* WooCommerce Cart Widget */}
           <button
             onClick={() => setActiveTab('cart')}
-            className="flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white p-2 sm:px-4 sm:py-2 rounded-xl transition-all shadow-xs"
+            className="relative flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 px-3.5 py-2.5 rounded-xl transition-all font-semibold text-xs"
           >
-            <div className="relative">
-              <ShoppingBag className="w-5 h-5 text-emerald-400" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-950 font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
-            <div className="hidden sm:block text-left text-xs">
-              <span className="text-[10px] text-slate-400 block font-normal leading-none">Cart Total</span>
-              <span className="font-extrabold text-white">₹{subtotal}</span>
-            </div>
+            <ShoppingBag className="w-4 h-4 text-emerald-700" />
+            <span className="hidden sm:inline font-bold">Cart</span>
+            {totalItems > 0 && (
+              <span className="bg-emerald-700 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-2xs">
+                {totalItems}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('admin')}
+            className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2.5 rounded-xl transition-all font-bold text-xs shadow-xs"
+          >
+            <User className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Admin WP</span>
           </button>
         </div>
       </div>
 
-      {/* 3. WordPress Sub-Navigation Bar */}
-      <div className="wp-subnav hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-          <nav className="flex items-center gap-1 text-xs font-semibold">
-            <button
-              onClick={() => setActiveTab('home')}
-              className={`px-4 py-3 hover:text-emerald-700 transition-colors ${
-                activeTab === 'home' ? 'text-emerald-700 font-extrabold border-b-2 border-emerald-700 bg-white' : 'text-slate-700'
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => {
-                onSelectCategory(null);
-                setActiveTab('shop');
-              }}
-              className={`px-4 py-3 hover:text-emerald-700 transition-colors ${
-                activeTab === 'shop' ? 'text-emerald-700 font-extrabold border-b-2 border-emerald-700 bg-white' : 'text-slate-700'
-              }`}
-            >
-              Shop Catalog
-            </button>
-            {(categories || []).map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  onSelectCategory(cat.id);
-                  setActiveTab('shop');
-                }}
-                className="px-3 py-3 text-slate-600 hover:text-emerald-700 transition-colors"
-              >
-                {cat.name}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActiveTab('track')}
-              className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
-                activeTab === 'track' ? 'text-emerald-700 bg-emerald-50' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Track Order Status
-            </button>
-            <button
-              onClick={() => setActiveTab('admin')}
-              className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg border transition-all ${
-                activeTab === 'admin'
-                  ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
-                  : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
-              }`}
-            >
-              <LayoutDashboard className="w-3.5 h-3.5" /> WP Admin Panel
-            </button>
-          </div>
+      {/* 3. Mobile Search Input Bar */}
+      <div className="lg:hidden px-4 pb-3">
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Search herbal supplements..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-slate-50 text-slate-900 text-xs rounded-xl pl-4 pr-9 py-2 border border-slate-300 focus:outline-none focus:border-emerald-700"
+          />
+          <Search className="w-4 h-4 text-slate-400 absolute right-3 top-2.5" />
         </div>
       </div>
 
-      {/* Mobile Search Overlay */}
-      {showSearchMobile && (
-        <div className="lg:hidden p-3 bg-slate-100 border-t border-slate-200">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white text-slate-900 text-xs rounded-xl pl-9 pr-4 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-600"
-            />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-          </div>
+      {/* 4. Sub-Navigation Category Links */}
+      <div className="bg-slate-50 border-t border-slate-200 px-4 sm:px-6 lg:px-8 overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto flex items-center gap-1 sm:gap-2 text-xs font-semibold whitespace-nowrap py-1">
+          <button
+            onClick={() => {
+              onSelectCategory(null);
+              setActiveTab('shop');
+            }}
+            className={`px-3 py-2 rounded-lg transition-all ${
+              activeTab === 'shop'
+                ? 'bg-emerald-700 text-white font-bold'
+                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+            }`}
+          >
+            All Catalog
+          </button>
+
+          {(categories || []).map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => {
+                onSelectCategory(cat.id);
+                setActiveTab('shop');
+              }}
+              className="px-3 py-2 rounded-lg text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60 transition-all"
+            >
+              {cat.name}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setActiveTab('track')}
+            className={`px-3 py-2 rounded-lg transition-all ml-auto ${
+              activeTab === 'track'
+                ? 'bg-amber-600 text-white font-bold'
+                : 'text-amber-800 font-bold hover:bg-amber-100'
+            }`}
+          >
+            Track Order Status
+          </button>
         </div>
-      )}
+      </div>
     </header>
   );
 };

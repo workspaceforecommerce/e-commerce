@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Filter, Search, SlidersHorizontal, Leaf } from 'lucide-react';
+import { SlidersHorizontal, ArrowUpDown, Filter, Sparkles, RefreshCw } from 'lucide-react';
 import { Category, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
+import { QuickViewModal } from '../components/QuickViewModal';
 
 interface ShopViewProps {
   categories: Category[];
   products: Product[];
   selectedCategoryId: number | null;
-  onSelectCategory: (id: number | null) => void;
-  onSelectProduct: (product: Product) => void;
+  onSelectCategory: (catId: number | null) => void;
   searchQuery: string;
-  setSearchQuery: (q: string) => void;
 }
 
 export const ShopView: React.FC<ShopViewProps> = ({
@@ -18,109 +17,163 @@ export const ShopView: React.FC<ShopViewProps> = ({
   products,
   selectedCategoryId,
   onSelectCategory,
-  onSelectProduct,
   searchQuery,
-  setSearchQuery,
 }) => {
-  const [sortBy, setSortBy] = useState<'default' | 'price-low' | 'price-high'>('default');
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number>(1000);
+  const [sortBy, setSortBy] = useState<'featured' | 'price_low' | 'price_high'>('featured');
 
-  let filtered = products;
+  // Filter Products
+  let filtered = products.filter((p) => {
+    const matchesCat = selectedCategoryId ? p.category_id === selectedCategoryId : true;
+    const matchesSearch = searchQuery
+      ? p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.short_description.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+    const matchesPrice = (p.discount_price || p.base_price) <= maxPrice;
+    return matchesCat && matchesSearch && matchesPrice;
+  });
 
-  if (selectedCategoryId) {
-    filtered = filtered.filter((p) => p.category_id === selectedCategoryId);
+  // Sort Products
+  if (sortBy === 'price_low') {
+    filtered.sort((a, b) => (a.discount_price || a.base_price) - (b.discount_price || b.base_price));
+  } else if (sortBy === 'price_high') {
+    filtered.sort((a, b) => (b.discount_price || b.base_price) - (a.discount_price || a.base_price));
   }
 
-  if (searchQuery.trim()) {
-    const q = searchQuery.toLowerCase();
-    filtered = filtered.filter(
-      (p) => p.title.toLowerCase().includes(q) || p.short_description.toLowerCase().includes(q)
-    );
-  }
-
-  if (sortBy === 'price-low') {
-    filtered = [...filtered].sort((a, b) => (a.discount_price || a.base_price) - (b.discount_price || b.base_price));
-  } else if (sortBy === 'price-high') {
-    filtered = [...filtered].sort((a, b) => (b.discount_price || b.base_price) - (a.discount_price || a.base_price));
-  }
+  const selectedCategoryName = categories.find((c) => c.id === selectedCategoryId)?.name || 'All Herbal Products';
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 wp-card p-5 rounded-2xl">
-        <div>
-          <h1 className="font-heading text-2xl font-bold text-slate-900">Shop Organic Catalog</h1>
-          <p className="text-xs text-slate-500">Showing {filtered.length} herbal formulations</p>
+      <QuickViewModal product={quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+
+      {/* Header Banner */}
+      <div className="wp-card p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-emerald-800 to-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">WooCommerce Shop Catalog</span>
+          <h1 className="font-heading text-2xl sm:text-3xl font-extrabold">{selectedCategoryName}</h1>
+          <p className="text-xs text-slate-300">Showing {filtered.length} organic & certified formulations</p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-4 h-4 text-emerald-700" />
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-white text-slate-800 text-xs rounded-xl px-3 py-2 border border-slate-300 focus:outline-none focus:border-emerald-700"
+        {selectedCategoryId && (
+          <button
+            onClick={() => onSelectCategory(null)}
+            className="self-start sm:self-auto bg-emerald-900/80 hover:bg-emerald-950 text-white text-xs font-bold px-4 py-2 rounded-xl border border-emerald-600/60 transition-all flex items-center gap-1.5"
           >
-            <option value="default">Sort by: Default</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-          </select>
-        </div>
+            <RefreshCw className="w-3.5 h-3.5" /> Clear Filters
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* WooCommerce Categories Sidebar */}
-        <aside className="space-y-4">
-          <div className="wp-card p-5 rounded-2xl space-y-3">
-            <h3 className="font-heading font-bold text-sm text-slate-900 border-b border-slate-200 pb-2 flex items-center gap-2">
-              <Leaf className="w-4 h-4 text-emerald-700" /> Product Categories
-            </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
+        {/* WooCommerce Filter Sidebar */}
+        <aside className="space-y-6">
+          <div className="wp-card p-5 sm:p-6 rounded-2xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+              <Filter className="w-5 h-5 text-emerald-700" />
+              <h3 className="font-heading font-bold text-base text-slate-900">Filter Products</h3>
+            </div>
 
-            <div className="space-y-1 text-xs font-semibold">
-              <button
-                onClick={() => onSelectCategory(null)}
-                className={`w-full text-left py-2 px-3 rounded-xl transition-all ${
-                  selectedCategoryId === null
-                    ? 'bg-emerald-700 text-white shadow-xs'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                All Products ({products.length})
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => onSelectCategory(cat.id)}
-                  className={`w-full text-left py-2 px-3 rounded-xl transition-all ${
-                    selectedCategoryId === cat.id
-                      ? 'bg-emerald-700 text-white shadow-xs'
-                      : 'text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
+            {/* Price Filter */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-xs font-bold text-slate-900">
+                <span>Max Price</span>
+                <span className="text-emerald-700">₹{maxPrice}</span>
+              </div>
+              <input
+                type="range"
+                min="100"
+                max="1500"
+                step="50"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="w-full accent-emerald-700 cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                <span>₹100</span>
+                <span>₹1500</span>
+              </div>
+            </div>
+
+            {/* Categories Selection */}
+            <div className="space-y-2 pt-3 border-t border-slate-200">
+              <h4 className="font-heading font-bold text-xs text-slate-900 uppercase">Categories</h4>
+              <ul className="space-y-1 text-xs text-slate-700 font-semibold">
+                <li>
+                  <button
+                    onClick={() => onSelectCategory(null)}
+                    className={`w-full text-left px-3 py-2 rounded-xl flex items-center justify-between transition-all ${
+                      selectedCategoryId === null ? 'bg-emerald-700 text-white font-bold' : 'hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>All Products</span>
+                    <span className="text-[10px]">{products.length}</span>
+                  </button>
+                </li>
+                {categories.map((c) => (
+                  <li key={c.id}>
+                    <button
+                      onClick={() => onSelectCategory(c.id)}
+                      className={`w-full text-left px-3 py-2 rounded-xl flex items-center justify-between transition-all ${
+                        selectedCategoryId === c.id ? 'bg-emerald-700 text-white font-bold' : 'hover:bg-slate-100'
+                      }`}
+                    >
+                      <span>{c.name}</span>
+                      <span className="text-[10px]">{products.filter((p) => p.category_id === c.id).length}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </aside>
 
-        {/* Product Grid */}
-        <main className="lg:col-span-3">
+        {/* Product Catalog Grid */}
+        <main className="lg:col-span-3 space-y-6">
+          {/* Sorting Bar */}
+          <div className="wp-card p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <span className="text-slate-600 font-semibold">
+              Showing <strong className="text-slate-900">{filtered.length}</strong> results
+            </span>
+
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              <ArrowUpDown className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-500 font-semibold">Sort By:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="bg-slate-50 text-slate-900 font-bold px-3 py-1.5 rounded-lg border border-slate-300 focus:outline-none focus:border-emerald-700"
+              >
+                <option value="featured">Featured / Popular</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+              </select>
+            </div>
+          </div>
+
           {filtered.length === 0 ? (
             <div className="wp-card rounded-2xl p-12 text-center space-y-3">
-              <p className="text-slate-500 text-sm">No products found matching your filter criteria.</p>
+              <Sparkles className="w-10 h-10 text-emerald-700 mx-auto" />
+              <h3 className="font-heading text-lg font-bold text-slate-900">No Products Matched Your Criteria</h3>
+              <p className="text-xs text-slate-500">Try adjusting your search term or price range filter.</p>
               <button
                 onClick={() => {
                   onSelectCategory(null);
-                  setSearchQuery('');
+                  setMaxPrice(1500);
                 }}
-                className="text-xs font-bold text-emerald-700 underline"
+                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs"
               >
-                Clear Filters & View All
+                Reset All Filters
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filtered.map((product) => (
-                <ProductCard key={product.id} product={product} onSelect={onSelectProduct} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onQuickView={(p) => setQuickViewProduct(p)}
+                />
               ))}
             </div>
           )}
