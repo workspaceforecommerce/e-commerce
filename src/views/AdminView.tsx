@@ -90,7 +90,7 @@ export const AdminView: React.FC = () => {
       if (bannersRes.success) setBanners(bannersRes.banners);
       if (logsRes.success) setApiLogs(logsRes.logs);
     } catch {
-      console.log('Using local state fallbacks');
+
     }
   };
 
@@ -198,7 +198,7 @@ export const AdminView: React.FC = () => {
 
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
         {/* Top Header */}
-        <AdminHeader onSearch={(q) => console.log('Search query:', q)} />
+        <AdminHeader onSearch={() => {}} />
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
           {notificationMsg && (

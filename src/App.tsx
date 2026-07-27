@@ -40,7 +40,7 @@ export const AppContent: React.FC = () => {
         if (catRes.success) setCategories(catRes.categories);
         if (prodRes.success) setProducts(prodRes.products);
       } catch {
-        console.log('Using local fallback data');
+
       }
     };
     fetchData();

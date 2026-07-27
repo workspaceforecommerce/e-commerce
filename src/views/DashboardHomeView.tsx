@@ -53,7 +53,7 @@ export const DashboardHomeView: React.FC<DashboardHomeViewProps> = ({ onQuickAct
         if (cRes.success) setRecentCustomers(cRes.data);
         if (aRes.success) setActivities(aRes.data);
       } catch {
-        console.log('Using local fallback state for Dashboard');
+
       }
     };
 

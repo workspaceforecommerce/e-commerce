@@ -40,7 +40,7 @@ export const VariantManagementView: React.FC = () => {
       if (attrRes.success) setAttributes(attrRes.attributes);
       if (varRes.success) setVariants(varRes.variants);
     } catch {
-      console.log('Using local variant state');
+
     } finally {
       setLoading(false);
     }

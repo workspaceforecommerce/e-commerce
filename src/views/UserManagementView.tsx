@@ -36,7 +36,7 @@ export const UserManagementView: React.FC = () => {
       if (rRes.success) setRoles(rRes.roles);
       if (lRes.success) setLogs(lRes.logs);
     } catch {
-      console.log('Using local RBAC state');
+
     } finally {
       setLoading(false);
     }

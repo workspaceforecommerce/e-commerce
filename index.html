@@ -35,10 +35,23 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('[PWA] Service Worker registered with scope:', reg.scope))
-            .catch(err => console.error('[PWA] Service Worker registration failed:', err));
+            .catch(() => {});
         });
       }
+
+      // PWA Install prompt — store event for deferred prompt use
+      // Calling preventDefault() suppresses the browser mini-infobar;
+      // we store the event and call prompt() on user action instead.
+      let _deferredInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        _deferredInstallPrompt = e;
+      });
+      window._deferredInstallPrompt = null;
+      Object.defineProperty(window, 'deferredInstallPrompt', {
+        get() { return _deferredInstallPrompt; },
+        set(v) { _deferredInstallPrompt = v; }
+      });
     </script>
   </body>
 </html>

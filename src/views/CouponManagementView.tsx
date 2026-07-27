@@ -49,7 +49,7 @@ export const CouponManagementView: React.FC = () => {
       const res: any = await fetch('/api/admin/coupons').then(r => r.json());
       if (res.success && res.coupons) setCoupons(res.coupons);
     } catch {
-      console.log('Using local coupon state');
+
     }
   };
 

@@ -120,7 +120,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onSearch, onNavigateTa
           { id: 2, type: 'stock', title: 'Low Stock Alert: Tulsi Tea', time: '1 hour ago', read: false },
           { id: 3, type: 'security', title: 'Admin Login from IP 49.207.200.5', time: '3 hours ago', read: true }
         ]}
-        onMarkAllRead={() => console.log('All notifications marked read')}
+        onMarkAllRead={() => {}}
       />
 
       {/* Command Palette Modal */}
