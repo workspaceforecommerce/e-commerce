@@ -11,9 +11,11 @@ export const InstallPwaBanner: React.FC = () => {
   return (
     <div className="bg-gradient-to-r from-emerald-800 to-slate-900 text-white px-4 py-2.5 shadow-md flex items-center justify-between text-xs animate-in fade-in">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-sm shrink-0">
-          HM
-        </div>
+        <img
+          src="/logo.png"
+          alt="Healthy Monks"
+          className="w-10 h-10 rounded-xl object-cover shrink-0 shadow-sm"
+        />
         <div>
           <h4 className="font-heading font-bold text-xs text-white">Install Healthy Monks Official Store App</h4>
           <p className="text-[11px] text-emerald-100">Enjoy one-click orders, instant tracking updates & offline browsing.</p>
