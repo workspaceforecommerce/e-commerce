@@ -11,6 +11,8 @@ import { CartView } from './views/CartView';
 import { CheckoutView } from './views/CheckoutView';
 import { OrderTrackView } from './views/OrderTrackView';
 import { AdminView } from './views/AdminView';
+import { LoginView } from './views/LoginView';
+import { UserManagementView } from './views/UserManagementView';
 import { Category, Product } from './types';
 
 export const AppContent: React.FC = () => {
@@ -77,7 +79,6 @@ export const AppContent: React.FC = () => {
               categories={categories}
               products={products}
               onSelectCategory={handleSelectCategory}
-              onSelectProduct={handleSelectProduct}
               onExploreShop={() => setActiveTab('shop')}
             />
           )}
@@ -88,9 +89,7 @@ export const AppContent: React.FC = () => {
               products={products}
               selectedCategoryId={selectedCategory}
               onSelectCategory={setSelectedCategory}
-              onSelectProduct={handleSelectProduct}
               searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
             />
           )}
 
@@ -123,6 +122,16 @@ export const AppContent: React.FC = () => {
           )}
 
           {activeTab === 'admin' && <AdminView />}
+          {activeTab === 'login' && (
+            <LoginView
+              onLoginSuccess={(user) => {
+                alert(`Welcome back, ${user.first_name}! Role: ${user.role}`);
+                setActiveTab('home');
+              }}
+              onBackToHome={() => setActiveTab('home')}
+            />
+          )}
+          {activeTab === 'users' && <UserManagementView />}
         </main>
       </div>
 

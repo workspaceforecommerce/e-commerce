@@ -6,6 +6,8 @@ import couponsApp from './routes/coupons';
 import ordersApp from './routes/orders';
 import adminApp from './routes/admin';
 import cloudinaryApp from './routes/cloudinary';
+import authApp from './routes/auth';
+import usersApp from './routes/users';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -38,8 +40,10 @@ app.get('/api/health', (c) => {
   });
 });
 
-// Route Modules
-app.route('/api', productsApp);
+// Register API Domain Modules
+app.route('/api/auth', authApp);
+app.route('/api/users', usersApp);
+app.route('/api/products', productsApp);
 app.route('/api/coupons', couponsApp);
 app.route('/api/orders', ordersApp);
 app.route('/api/admin', adminApp);

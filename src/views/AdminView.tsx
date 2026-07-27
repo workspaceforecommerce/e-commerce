@@ -14,13 +14,16 @@ import {
   Truck,
   DollarSign,
   AlertTriangle,
-  FileText
+  FileText,
+  ShieldCheck
 } from 'lucide-react';
 import { Product, Order, AbandonedCart, ApiLog, Review, Banner } from '../types';
 import { CloudinaryUpload } from '../components/CloudinaryUpload';
+import { UserManagementView } from './UserManagementView';
+import { AdminSidebar } from '../components/AdminSidebar';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'abandoned' | 'cms' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [stats, setStats] = useState({
     total_sales: 145890.00,
@@ -110,9 +113,12 @@ export const AdminView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 wp-card p-6 rounded-2xl bg-white">
+    <div className="flex min-h-[85vh] -mx-4 sm:-mx-6 lg:-mx-8 -my-6 bg-slate-100 rounded-2xl overflow-hidden border border-slate-200">
+      <AdminSidebar activeTab={activeTab} setActiveTab={(tab: any) => setActiveTab(tab)} />
+
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 wp-card p-6 rounded-2xl bg-white">
         <div>
           <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-widest">WordPress Dashboard</span>
           <h1 className="font-heading text-2xl font-extrabold text-slate-900">Healthy Monks Admin Control Panel</h1>
@@ -140,6 +146,7 @@ export const AdminView: React.FC = () => {
           { id: 'orders', label: 'Order Master', icon: ShoppingBag },
           { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
           { id: 'cms', label: 'CMS & Reviews', icon: Sliders },
+          { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },
           { id: 'api-logs', label: 'API & Push Logs', icon: Send },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -390,6 +397,9 @@ export const AdminView: React.FC = () => {
         </div>
       )}
 
+      {/* Users & RBAC Tab */}
+      {activeTab === 'users-rbac' && <UserManagementView />}
+
       {/* API & Push Logs */}
       {activeTab === 'api-logs' && (
         <div className="wp-card p-6 rounded-2xl space-y-4">
@@ -412,5 +422,6 @@ export const AdminView: React.FC = () => {
         </div>
       )}
     </div>
-  );
+  </div>
+);
 };

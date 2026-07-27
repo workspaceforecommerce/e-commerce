@@ -20,7 +20,8 @@ export const Header: React.FC<HeaderProps> = ({
   categories = [],
   onSelectCategory = () => {},
 }) => {
-  const { totalItems } = useCart();
+  const { cart } = useCart();
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
