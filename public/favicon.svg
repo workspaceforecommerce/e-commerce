@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect width="128" height="128" rx="32" ry="32" fill="#166534"/>
+  <rect x="4" y="4" width="120" height="120" rx="28" ry="28" fill="none" stroke="#FEF08A" stroke-width="3" opacity="0.6"/>
+  <text x="64" y="78" font-family="Outfit, Inter, sans-serif" font-size="52" font-weight="900" fill="#FEF08A" text-anchor="middle" letter-spacing="-2">HM</text>
+</svg>
