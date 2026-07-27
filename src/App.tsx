@@ -22,7 +22,14 @@ import { Category, Product } from './types';
 import { I18nProvider } from './context/I18nContext';
 
 export const AppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const [activeTab, setActiveTabState] = useState<string>(() => {
+    return localStorage.getItem('hm_active_tab') || 'home';
+  });
+
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab);
+    localStorage.setItem('hm_active_tab', tab);
+  };
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);

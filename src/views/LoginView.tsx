@@ -130,9 +130,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
   return (
     <div className="max-w-md mx-auto py-8 sm:py-12 px-4 space-y-6">
       <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-heading font-extrabold text-2xl mx-auto shadow-md">
-          HM
-        </div>
+        <img
+          src="/logo.png"
+          alt="Healthy Monks"
+          className="w-14 h-14 rounded-2xl mx-auto shadow-md object-cover"
+        />
         <h1 className="font-heading text-2xl font-extrabold text-slate-900">
           {isAdminMode ? 'Control Panel Sign In' : isRegister ? 'Create Your Account' : 'Welcome Back'}
         </h1>
