@@ -7,8 +7,12 @@ bucket = "./dist"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "e-commerce-db"
+database_name = "e_commerce"
 database_id = "ce356b20-7e8e-4ddc-8df3-bcf58441e306"
+
+[vars]
+CLOUDINARY_CLOUD_NAME = "hfx4iebd"
+CLOUDINARY_API_KEY = "558348261266151"
 
 [env.production]
 name = "healthy-monks-pwa-prod"
