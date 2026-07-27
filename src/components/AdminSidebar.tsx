@@ -22,6 +22,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'brands', label: 'Brands & Collections', icon: Tag },
     { id: 'media', label: 'Media Library', icon: Images },
     { id: 'orders', label: 'Order Fulfillment', icon: ShoppingBag },
+    { id: 'customers', label: 'Customer CRM & Groups', icon: Users },
     { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },
     { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
     { id: 'cms', label: 'CMS & Banner Editor', icon: Sliders },
