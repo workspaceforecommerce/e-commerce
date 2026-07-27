@@ -82,15 +82,35 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
         setMsg({ text: data.message || 'Authentication failed', isError: true });
       }
     } catch {
-      // Fallback
-      onLoginSuccess({
-        id: 1,
-        first_name: isAdminMode ? 'Super' : 'Aarav',
-        last_name: isAdminMode ? 'Admin' : 'Sharma',
-        email: formData.email,
-        phone: formData.phone,
-        role: isAdminMode ? 'Super Admin' : 'Customer',
-      });
+      // Fallback: validate admin credentials client-side when API is unreachable
+      const ADMIN_EMAIL = 'mohdnomaantalib@gmail.com';
+      const ADMIN_PASSWORD = 'Cba@4321';
+      const isAdminCreds = formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD;
+
+      if (isAdminMode || isAdminCreds) {
+        if (!isAdminCreds) {
+          setMsg({ text: 'Invalid admin credentials. Please check your email and password.', isError: true });
+          setLoading(false);
+          return;
+        }
+        onLoginSuccess({
+          id: 0,
+          first_name: 'Mohd Nomaan',
+          last_name: 'Talib',
+          email: ADMIN_EMAIL,
+          phone: '+91 9812345678',
+          role: 'Super Admin',
+        });
+      } else {
+        onLoginSuccess({
+          id: Date.now(),
+          first_name: 'Aarav',
+          last_name: 'Sharma',
+          email: formData.email,
+          phone: formData.phone,
+          role: 'Customer',
+        });
+      }
     } finally {
       setLoading(false);
     }

@@ -135,9 +135,9 @@ export const AppContent: React.FC = () => {
               <div className="max-w-md mx-auto py-8">
                 <div className="bg-amber-50 border border-amber-300 text-amber-900 px-4 py-3 rounded-2xl text-xs font-bold mb-4 flex items-center justify-between">
                   <span>🔒 Admin Authentication Required</span>
-                  <span className="text-[10px] bg-amber-200 px-2 py-0.5 rounded font-mono">Credentials: mohdnomaantalib@gmail.com / Cba@4321</span>
                 </div>
                 <LoginView
+                  isAdminMode={true}
                   onLoginSuccess={(loggedInUser) => {
                     setUser(loggedInUser);
                   }}

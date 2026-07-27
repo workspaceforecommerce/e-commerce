@@ -59,6 +59,32 @@ authApp.post('/login', async (c) => {
     return c.json({ success: false, message: 'Password is required.' }, 400);
   }
 
+  // ─── Hardcoded Super Admin Credentials ─────────────────────────
+  // These are checked FIRST before any DB lookup so the admin can
+  // always log in even if the DB is unavailable or not yet seeded.
+  const ADMIN_EMAIL = 'mohdnomaantalib@gmail.com';
+  const ADMIN_PASSWORD = 'Cba@4321';
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    const tokenPayload = { id: 0, email: ADMIN_EMAIL, role: 'Super Admin' };
+    const accessToken = 'hm_at_' + btoa(JSON.stringify(tokenPayload)) + '.' + Date.now();
+    return c.json({
+      success: true,
+      message: 'Welcome back, Super Admin!',
+      data: {
+        user: {
+          id: 0,
+          first_name: 'Mohd Nomaan',
+          last_name: 'Talib',
+          email: ADMIN_EMAIL,
+          phone: '+91 9812345678',
+          role: 'Super Admin',
+        },
+        tokens: { access_token: accessToken, refresh_token: accessToken, expires_in: 3600 },
+      },
+    });
+  }
+  // ───────────────────────────────────────────────────────────────
+
   const hashedPassword = await hashPassword(password || '');
 
   let user: any = null;
