@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SlidersHorizontal, ArrowUpDown, Filter, Sparkles, RefreshCw } from 'lucide-react';
+import { SlidersHorizontal, ArrowUpDown, Filter, Frown, RefreshCw } from 'lucide-react';
 import { Category, Product } from '../types';
 import { ProductCard } from '../components/ProductCard';
 import { QuickViewModal } from '../components/QuickViewModal';
@@ -155,17 +155,22 @@ export const ShopView: React.FC<ShopViewProps> = ({
           </div>
 
           {filtered.length === 0 ? (
-            <div className="wp-card rounded-2xl p-12 text-center space-y-3">
-              <Sparkles className="w-10 h-10 text-emerald-700 mx-auto" />
-              <h3 className="font-heading text-lg font-bold text-slate-900">No Products Matched Your Criteria</h3>
-              <p className="text-xs text-slate-500">Try adjusting your search term or price range filter.</p>
+            <div className="wp-card rounded-2xl p-12 text-center space-y-4 bg-white/90 backdrop-blur-xs animate-in fade-in zoom-in-95 duration-300 border border-slate-200 shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200/80 shadow-xs">
+                <Frown className="w-8 h-8" />
+              </div>
+              <div className="space-y-1.5 max-w-sm mx-auto">
+                <h3 className="font-heading text-lg font-bold text-slate-900">No Products Matched Your Criteria</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">We couldn't find any products matching your selected category or price filter.</p>
+              </div>
               <button
                 onClick={() => {
                   onSelectCategory(null);
                   setMaxPrice(1500);
                 }}
-                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs"
+                className="inline-flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 active:scale-95 text-white font-bold text-xs px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
               >
+                <RefreshCw className="w-3.5 h-3.5" />
                 Reset All Filters
               </button>
             </div>
