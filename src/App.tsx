@@ -16,6 +16,8 @@ import { UserManagementView } from './views/UserManagementView';
 import { BlogView } from './views/BlogView';
 import { AboutView } from './views/AboutView';
 import { ContactView } from './views/ContactView';
+import { WishlistView } from './views/WishlistView';
+import { MiniCartDrawer } from './components/MiniCartDrawer';
 import { Category, Product } from './types';
 import { I18nProvider } from './context/I18nContext';
 
@@ -164,7 +166,14 @@ export const AppContent: React.FC = () => {
             />
           )}
           {activeTab === 'users' && <UserManagementView />}
+          {activeTab === 'wishlist' && <WishlistView onContinueShopping={() => setActiveTab('shop')} />}
         </main>
+
+        {/* Global Mini Cart Slide-Over Drawer */}
+        <MiniCartDrawer
+          onProceedCheckout={() => setActiveTab('checkout')}
+          onViewCart={() => setActiveTab('cart')}
+        />
       </div>
 
       {/* WordPress WooCommerce Footer */}

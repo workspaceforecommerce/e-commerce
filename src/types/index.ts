@@ -61,18 +61,24 @@ export interface Product {
   id: number;
   category_id: number;
   category_name?: string;
+  name: string;
   title: string;
   slug: string;
   sku: string;
   short_description: string;
   full_description: string;
+  price: number;
   base_price: number;
   discount_price?: number | null;
+  stock: number;
   stock_quantity: number;
+  image_url: string;
   images: string[];
+  avg_rating?: number;
+  review_count?: number;
   is_featured: number;
   is_bestseller: number;
-  is_trending: number;
+  is_trending?: number;
   status: string;
   meta_title?: string;
   meta_description?: string;
@@ -81,21 +87,28 @@ export interface Product {
 }
 
 export interface CartItem {
+  id?: number | string;
   product_id: number;
   variant_id?: number | null;
+  name: string;
   title: string;
   variant_name?: string;
+  image_url: string;
   image: string;
   price: number;
-  original_price: number;
+  original_price?: number;
   quantity: number;
 }
 
 export interface Coupon {
+  id?: string;
   code: string;
-  discountType: 'flat' | 'percentage';
+  name?: string;
+  discountType: 'flat' | 'percentage' | 'fixed_amount' | 'free_shipping';
   discountValue: number;
   calculatedDiscount: number;
+  is_free_shipping?: boolean;
+  is_stackable?: boolean;
 }
 
 export interface Order {

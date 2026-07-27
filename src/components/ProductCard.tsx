@@ -23,9 +23,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
     addToCart({
       product_id: product.id,
       variant_id: null,
-      title: product.title,
+      name: product.title || product.name || 'Herbal Supplement',
+      title: product.title || product.name || 'Herbal Supplement',
       variant_name: 'Standard Pack',
-      image: product.images[0] || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80',
+      image_url: product.image_url || (product.images && product.images[0]) || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80',
+      image: product.image_url || (product.images && product.images[0]) || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80',
       price,
       original_price: product.base_price,
       quantity: 1,

@@ -26,19 +26,22 @@ export const ShopView: React.FC<ShopViewProps> = ({
   // Filter Products
   let filtered = products.filter((p) => {
     const matchesCat = selectedCategoryId ? p.category_id === selectedCategoryId : true;
+    const titleOrName = p.title || p.name || '';
+    const desc = p.short_description || '';
     const matchesSearch = searchQuery
-      ? p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.short_description.toLowerCase().includes(searchQuery.toLowerCase())
+      ? titleOrName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        desc.toLowerCase().includes(searchQuery.toLowerCase())
       : true;
-    const matchesPrice = (p.discount_price || p.base_price) <= maxPrice;
+    const pPrice = p.discount_price || p.base_price || p.price || 0;
+    const matchesPrice = pPrice <= maxPrice;
     return matchesCat && matchesSearch && matchesPrice;
   });
 
   // Sort Products
   if (sortBy === 'price_low') {
-    filtered.sort((a, b) => (a.discount_price || a.base_price) - (b.discount_price || b.base_price));
+    filtered.sort((a, b) => ((a.discount_price || a.base_price || a.price || 0) - (b.discount_price || b.base_price || b.price || 0)));
   } else if (sortBy === 'price_high') {
-    filtered.sort((a, b) => (b.discount_price || b.base_price) - (a.discount_price || a.base_price));
+    filtered.sort((a, b) => ((b.discount_price || b.base_price || b.price || 0) - (a.discount_price || a.base_price || a.price || 0)));
   }
 
   const selectedCategoryName = categories.find((c) => c.id === selectedCategoryId)?.name || 'All Herbal Products';

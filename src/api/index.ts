@@ -13,6 +13,8 @@ import { variantApp } from './routes/variants';
 import mediaApp from './routes/media';
 import { brandsApp, mfgApp, collectionsApp } from './routes/brands';
 import reviewsApp from './routes/reviews';
+import cartApp from './routes/cart';
+import wishlistApp from './routes/wishlist';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -60,5 +62,7 @@ app.route('/api/brands', brandsApp);
 app.route('/api/manufacturers', mfgApp);
 app.route('/api/collections', collectionsApp);
 app.route('/api/reviews', reviewsApp);
+app.route('/api/cart', cartApp);
+app.route('/api/wishlist', wishlistApp);
 
 export default app;

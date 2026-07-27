@@ -24,11 +24,13 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
     addToCart({
       product_id: product.id,
       variant_id: selectedVariant ? selectedVariant.id : null,
-      title: product.title,
+      name: product.title || product.name || 'Herbal Supplement',
+      title: product.title || product.name || 'Herbal Supplement',
       variant_name: selectedVariant ? selectedVariant.variant_name : 'Standard',
-      image: product.images[0] || '',
-      price: price,
-      original_price: product.base_price,
+      image_url: product.image_url || (product.images && product.images[0]) || '',
+      image: product.image_url || (product.images && product.images[0]) || '',
+      price: price || product.base_price || product.price || 0,
+      original_price: product.base_price || product.price || 0,
       quantity,
     });
 

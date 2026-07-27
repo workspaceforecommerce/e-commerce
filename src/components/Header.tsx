@@ -90,10 +90,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right Action Icons */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
-            onClick={() => setActiveTab('shop')}
-            className="hidden sm:flex items-center gap-1.5 p-2 px-3 rounded-xl hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all"
+            onClick={() => setActiveTab('wishlist')}
+            className="relative flex items-center gap-1.5 p-2 px-3 rounded-xl hover:bg-slate-100 text-slate-700 text-xs font-semibold transition-all"
           >
-            <Heart className="w-4 h-4 text-emerald-700" />
+            <Heart className="w-4 h-4 text-emerald-700 fill-emerald-100" />
             <span className="hidden xl:inline">Wishlist</span>
           </button>
 

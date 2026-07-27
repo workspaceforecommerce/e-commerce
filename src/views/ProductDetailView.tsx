@@ -15,23 +15,25 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, o
   );
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
-  const [activeImage, setActiveImage] = useState(product.images[0] || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80');
+  const [activeImage, setActiveImage] = useState((product.images && product.images[0]) || product.image_url || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80');
 
   const currentPrice = selectedVariant
     ? selectedVariant.price
-    : product.discount_price || product.base_price;
+    : (product.discount_price || product.base_price || product.price || 0);
 
-  const originalPrice = selectedVariant ? selectedVariant.price * 1.2 : product.base_price;
+  const originalPrice = selectedVariant ? selectedVariant.price * 1.2 : (product.base_price || product.price || 0);
 
   const handleAddToCart = () => {
     addToCart({
       product_id: product.id,
       variant_id: selectedVariant ? selectedVariant.id : null,
-      title: product.title,
+      name: product.title || product.name || 'Herbal Supplement',
+      title: product.title || product.name || 'Herbal Supplement',
       variant_name: selectedVariant ? selectedVariant.variant_name : 'Standard',
-      image: activeImage,
-      price: currentPrice,
-      original_price: originalPrice,
+      image_url: activeImage || product.image_url || '',
+      image: activeImage || product.image_url || '',
+      price: currentPrice || product.price || product.base_price || 0,
+      original_price: originalPrice || product.price || product.base_price || 0,
       quantity,
     });
 
