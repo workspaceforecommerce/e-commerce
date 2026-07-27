@@ -10,6 +10,7 @@ interface HomeViewProps {
   products: Product[];
   onSelectCategory: (catId: number | null) => void;
   onExploreShop: () => void;
+  onNavigate?: (tab: string) => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -17,6 +18,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   products,
   onSelectCategory,
   onExploreShop,
+  onNavigate = () => {},
 }) => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
@@ -128,6 +130,52 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </li>
                 );
               })}
+            </ul>
+          </div>
+
+          {/* Quick Pages & Store Navigation Widget */}
+          <div className="wp-card p-5 sm:p-6 rounded-2xl space-y-3">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5">
+              <Sparkles className="w-4 h-4 text-emerald-700" />
+              <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-900">Explore Store Pages</h3>
+            </div>
+            <ul className="space-y-1 text-xs text-slate-700 font-semibold">
+              <li>
+                <button
+                  onClick={onExploreShop}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
+                >
+                  <span>All Herbal Catalog</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('blog')}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
+                >
+                  <span>Health & Wellness Journal</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('about')}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
+                >
+                  <span>About Himalayan Sourcing</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('contact')}
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-emerald-50 hover:text-emerald-800 transition-colors flex items-center justify-between"
+                >
+                  <span>Contact Customer Support</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </li>
             </ul>
           </div>
 

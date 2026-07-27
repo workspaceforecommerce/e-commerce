@@ -83,6 +83,7 @@ export const AppContent: React.FC = () => {
               products={products}
               onSelectCategory={handleSelectCategory}
               onExploreShop={() => setActiveTab('shop')}
+              onNavigate={(tab) => setActiveTab(tab)}
             />
           )}
 
