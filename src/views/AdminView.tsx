@@ -35,12 +35,13 @@ import { OrderManagementView } from './OrderManagementView';
 import { PaymentManagementView } from './PaymentManagementView';
 import { ShippingManagementView } from './ShippingManagementView';
 import { ReturnsManagementView } from './ReturnsManagementView';
+import { NotificationsInvoicesView } from './NotificationsInvoicesView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'payments' | 'shipping' | 'returns' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -394,6 +395,9 @@ export const AdminView: React.FC = () => {
 
           {/* 5F. Returns, Refunds & RMA Management */}
           {activeTab === 'returns' && <ReturnsManagementView />}
+
+          {/* 5G. Enterprise Invoices, Multi-Channel Notifications & Order Timeline */}
+          {activeTab === 'invoices-notifications' && <NotificationsInvoicesView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
