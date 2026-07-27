@@ -3,7 +3,7 @@ import { Env, executeRun, queryAll, queryFirst } from '../db';
 
 const adminApp = new Hono<{ Bindings: Env }>();
 
-// 1. Admin Analytics Dashboard Stats
+// 1. Dashboard Stats
 adminApp.get('/dashboard-stats', async (c) => {
   if (!c.env?.DB) {
     return c.json({
@@ -38,9 +38,37 @@ adminApp.get('/dashboard-stats', async (c) => {
   });
 });
 
-// 2. Product Master CRUD
+// 2. Category Master CRUD
+adminApp.get('/categories', async (c) => {
+  if (!c.env?.DB) return c.json({ success: true, categories: getFallbackAdminCategories() });
+  const categories = await queryAll(c.env.DB, 'SELECT * FROM categories ORDER BY id DESC');
+  return c.json({ success: true, categories });
+});
+
+adminApp.post('/categories', async (c) => {
+  const { name, parent_id = null, description, image_url, status = 'active' } = await c.req.json();
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  if (!c.env?.DB) return c.json({ success: true, message: 'Category added' });
+  await executeRun(
+    c.env.DB,
+    'INSERT INTO categories (name, slug, parent_id, description, image_url, status) VALUES (?, ?, ?, ?, ?, ?)',
+    [name, slug, parent_id || null, description || null, image_url || null, status]
+  );
+  return c.json({ success: true, message: 'Category created successfully' });
+});
+
+adminApp.delete('/categories/:id', async (c) => {
+  const id = c.req.param('id');
+  if (c.env?.DB) {
+    await executeRun(c.env.DB, 'DELETE FROM categories WHERE id = ?', [id]);
+  }
+  return c.json({ success: true, message: 'Category deleted' });
+});
+
+// 3. Product Master CRUD
 adminApp.get('/products', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, products: getFallbackAdminProducts() });
+  if (!c.env?.DB) return c.json({ success: true, products: getFallbackAdminProducts() });
   const products = await queryAll(c.env.DB, 'SELECT p.*, c.name as category_name FROM products p JOIN categories c ON p.category_id = c.id ORDER BY p.id DESC');
   const formatted = products.map(p => ({
     ...p,
@@ -80,39 +108,63 @@ adminApp.post('/products', async (c) => {
   return c.json({ success: true, message: 'Product created successfully' });
 });
 
-adminApp.put('/products/:id', async (c) => {
+adminApp.delete('/products/:id', async (c) => {
   const id = c.req.param('id');
-  const body = await c.req.json();
-  const {
-    category_id, title, sku, short_description, full_description,
-    base_price, discount_price, stock_quantity, images, is_featured,
-    is_bestseller, is_trending, status
-  } = body;
-
-  if (!c.env?.DB) {
-    return c.json({ success: true, message: 'Product updated successfully' });
+  if (c.env?.DB) {
+    await executeRun(c.env.DB, 'DELETE FROM products WHERE id = ?', [id]);
   }
+  return c.json({ success: true, message: 'Product deleted' });
+});
+
+// 4. Promo Coupons CRUD
+adminApp.get('/coupons', async (c) => {
+  if (!c.env?.DB) return c.json({ success: true, coupons: getFallbackAdminCoupons() });
+  const coupons = await queryAll(c.env.DB, 'SELECT * FROM coupons ORDER BY id DESC');
+  return c.json({ success: true, coupons });
+});
+
+adminApp.post('/coupons', async (c) => {
+  const { code, discount_type, discount_value, min_order_amount = 0, max_discount_amount = null, expiry_date = '2026-12-31' } = await c.req.json();
+  if (!c.env?.DB) return c.json({ success: true, message: 'Coupon added' });
 
   await executeRun(
     c.env.DB,
-    `UPDATE products SET
-      category_id = ?, title = ?, sku = ?, short_description = ?, full_description = ?,
-      base_price = ?, discount_price = ?, stock_quantity = ?, images = ?, is_featured = ?,
-      is_bestseller = ?, is_trending = ?, status = ?, updated_at = CURRENT_TIMESTAMP
-    WHERE id = ?`,
-    [
-      category_id, title, sku, short_description, full_description,
-      base_price, discount_price || null, stock_quantity, JSON.stringify(images || []),
-      is_featured, is_bestseller, is_trending, status || 'active', id
-    ]
+    'INSERT INTO coupons (code, discount_type, discount_value, min_order_amount, max_discount_amount, expiry_date) VALUES (?, ?, ?, ?, ?, ?)',
+    [code.toUpperCase(), discount_type, discount_value, min_order_amount, max_discount_amount || null, expiry_date]
   );
-
-  return c.json({ success: true, message: 'Product updated successfully' });
+  return c.json({ success: true, message: 'Promo Coupon created successfully' });
 });
 
-// 3. Order Master Management
+adminApp.delete('/coupons/:id', async (c) => {
+  const id = c.req.param('id');
+  if (c.env?.DB) {
+    await executeRun(c.env.DB, 'DELETE FROM coupons WHERE id = ?', [id]);
+  }
+  return c.json({ success: true, message: 'Coupon deleted' });
+});
+
+// 5. Courier Companies CRUD
+adminApp.get('/couriers', async (c) => {
+  if (!c.env?.DB) return c.json({ success: true, couriers: getFallbackCouriers() });
+  const couriers = await queryAll(c.env.DB, 'SELECT * FROM couriers ORDER BY name ASC');
+  return c.json({ success: true, couriers });
+});
+
+adminApp.post('/couriers', async (c) => {
+  const { name, tracking_url_template } = await c.req.json();
+  if (!c.env?.DB) return c.json({ success: true, message: 'Courier added' });
+
+  await executeRun(
+    c.env.DB,
+    'INSERT INTO couriers (name, tracking_url_template) VALUES (?, ?)',
+    [name, tracking_url_template]
+  );
+  return c.json({ success: true, message: 'Courier partner added successfully' });
+});
+
+// 6. Order Master
 adminApp.get('/orders', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, orders: getFallbackAdminOrders() });
+  if (!c.env?.DB) return c.json({ success: true, orders: getFallbackAdminOrders() });
   const orders = await queryAll(
     c.env.DB,
     `SELECT o.*, c.name as courier_name
@@ -144,36 +196,19 @@ adminApp.put('/orders/:id/status', async (c) => {
     [order_status || null, payment_status || null, courier_id || null, tracking_number || null, cod_confirmed ?? null, id]
   );
 
-  // Log automated notification
-  const order = await queryFirst(c.env.DB, 'SELECT * FROM orders WHERE id = ?', [id]);
-  if (order) {
-    await executeRun(
-      c.env.DB,
-      'INSERT INTO api_logs (service_name, event_type, recipient, payload) VALUES (?, ?, ?, ?)',
-      ['SMS', 'ShippingAlert', order.customer_phone, JSON.stringify({ order_number: order.order_number, status: order_status, tracking_number })]
-    );
-  }
-
   return c.json({ success: true, message: 'Order status updated successfully' });
 });
 
-// 4. Couriers Management
-adminApp.get('/couriers', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, couriers: getFallbackCouriers() });
-  const couriers = await queryAll(c.env.DB, 'SELECT * FROM couriers ORDER BY name ASC');
-  return c.json({ success: true, couriers });
-});
-
-// 5. Abandoned Carts & Automated Reminders
+// 7. Abandoned Carts & Reminders
 adminApp.get('/abandoned-carts', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, carts: getFallbackAbandonedCarts() });
+  if (!c.env?.DB) return c.json({ success: true, carts: getFallbackAbandonedCarts() });
   const carts = await queryAll(c.env.DB, 'SELECT * FROM abandoned_carts ORDER BY created_at DESC');
   return c.json({ success: true, carts });
 });
 
 adminApp.post('/abandoned-carts/:id/send-reminder', async (c) => {
   const id = c.req.param('id');
-  if (c.env.DB) {
+  if (c.env?.DB) {
     const cart = await queryFirst(c.env.DB, 'SELECT * FROM abandoned_carts WHERE id = ?', [id]);
     if (cart) {
       await executeRun(
@@ -184,23 +219,35 @@ adminApp.post('/abandoned-carts/:id/send-reminder', async (c) => {
       await executeRun(
         c.env.DB,
         'INSERT INTO api_logs (service_name, event_type, recipient, payload) VALUES (?, ?, ?, ?)',
-        ['WhatsApp', 'AbandonedCartReminder', cart.customer_phone, JSON.stringify({ message: 'Complete your Healthy Monks order now and get 10% off using code MONK10!' })]
+        ['WhatsApp', 'AbandonedCartReminder', cart.customer_phone, JSON.stringify({ message: 'Complete your Healthy Monks order now!' })]
       );
     }
   }
   return c.json({ success: true, message: 'Automated WhatsApp & SMS cart reminder sent successfully!' });
 });
 
-// 6. CMS Banners Management
+// 8. Banners Management (CMS)
 adminApp.get('/banners', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, banners: getFallbackBanners() });
+  if (!c.env?.DB) return c.json({ success: true, banners: getFallbackBanners() });
   const banners = await queryAll(c.env.DB, 'SELECT * FROM banners ORDER BY sort_order ASC');
   return c.json({ success: true, banners });
 });
 
-// 7. Reviews Moderation
+adminApp.post('/banners', async (c) => {
+  const { title, subtitle, image_url, link_url = '/', section = 'home_slider' } = await c.req.json();
+  if (c.env?.DB) {
+    await executeRun(
+      c.env.DB,
+      'INSERT INTO banners (title, subtitle, image_url, link_url, section) VALUES (?, ?, ?, ?, ?)',
+      [title, subtitle || null, image_url, link_url, section]
+    );
+  }
+  return c.json({ success: true, message: 'Banner added successfully' });
+});
+
+// 9. Reviews Moderation
 adminApp.get('/reviews', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, reviews: getFallbackReviews() });
+  if (!c.env?.DB) return c.json({ success: true, reviews: getFallbackReviews() });
   const reviews = await queryAll(c.env.DB, 'SELECT * FROM reviews ORDER BY id DESC');
   return c.json({ success: true, reviews });
 });
@@ -208,20 +255,41 @@ adminApp.get('/reviews', async (c) => {
 adminApp.put('/reviews/:id/status', async (c) => {
   const id = c.req.param('id');
   const { status } = await c.req.json();
-  if (c.env.DB) {
+  if (c.env?.DB) {
     await executeRun(c.env.DB, 'UPDATE reviews SET status = ? WHERE id = ?', [status, id]);
   }
   return c.json({ success: true, message: `Review status updated to ${status}` });
 });
 
-// 8. API Notification Logs
+// 10. API Notification Logs & Push Campaigns
 adminApp.get('/api-logs', async (c) => {
-  if (!c.env.DB) return c.json({ success: true, logs: getFallbackApiLogs() });
+  if (!c.env?.DB) return c.json({ success: true, logs: getFallbackApiLogs() });
   const logs = await queryAll(c.env.DB, 'SELECT * FROM api_logs ORDER BY id DESC LIMIT 50');
   return c.json({ success: true, logs });
 });
 
+adminApp.post('/send-push-campaign', async (c) => {
+  const { title, body, segment = 'All Users' } = await c.req.json();
+  if (c.env?.DB) {
+    await executeRun(
+      c.env.DB,
+      'INSERT INTO api_logs (service_name, event_type, recipient, payload) VALUES (?, ?, ?, ?)',
+      ['WebPush', 'PromotionalCampaign', segment, JSON.stringify({ title, body })]
+    );
+  }
+  return c.json({ success: true, message: `Broadcast Push Campaign "${title}" dispatched to ${segment}` });
+});
+
 export default adminApp;
+
+function getFallbackAdminCategories() {
+  return [
+    { id: 1, name: 'Immunity Boosters', slug: 'immunity-boosters', status: 'active' },
+    { id: 2, name: 'Organic Teas & Infusions', slug: 'organic-teas', status: 'active' },
+    { id: 3, name: 'Ayurvedic Churna & Powders', slug: 'ayurvedic-powders', status: 'active' },
+    { id: 4, name: 'Superfoods & Seeds', slug: 'superfoods-seeds', status: 'active' }
+  ];
+}
 
 function getFallbackAdminProducts() {
   return [
@@ -230,6 +298,14 @@ function getFallbackAdminProducts() {
     { id: 3, category_name: 'Organic Teas & Infusions', title: 'Himalayan Tulsi Green Tea', sku: 'HM-TEA-003', base_price: 349, discount_price: 279, stock_quantity: 200, is_featured: 1, is_bestseller: 0, is_trending: 1, status: 'active' },
     { id: 4, category_name: 'Ayurvedic Churna & Powders', title: 'Raw Organic Triphala Powder', sku: 'HM-TRI-004', base_price: 399, discount_price: 299, stock_quantity: 120, is_featured: 0, is_bestseller: 1, is_trending: 1, status: 'active' },
     { id: 5, category_name: 'Superfoods & Seeds', title: 'Raw Organic Chia Seeds', sku: 'HM-CHI-005', base_price: 299, discount_price: 219, stock_quantity: 300, is_featured: 1, is_bestseller: 0, is_trending: 0, status: 'active' }
+  ];
+}
+
+function getFallbackAdminCoupons() {
+  return [
+    { id: 1, code: 'WELCOME100', discount_type: 'flat', discount_value: 100, min_order_amount: 499, expiry_date: '2026-12-31', status: 'active' },
+    { id: 2, code: 'MONK15', discount_type: 'percentage', discount_value: 15, min_order_amount: 799, expiry_date: '2026-12-31', status: 'active' },
+    { id: 3, code: 'DETOX20', discount_type: 'percentage', discount_value: 20, min_order_amount: 999, expiry_date: '2026-12-31', status: 'active' }
   ];
 }
 
