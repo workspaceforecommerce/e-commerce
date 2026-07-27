@@ -1,0 +1,14 @@
+name = "healthy-monks-pwa"
+main = "src/api/index.ts"
+compatibility_date = "2024-12-01"
+
+[site]
+bucket = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "e-commerce-db"
+database_id = "ce356b20-7e8e-4ddc-8df3-bcf58441e306"
+
+[env.production]
+name = "healthy-monks-pwa-prod"
