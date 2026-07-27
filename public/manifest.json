@@ -1,0 +1,24 @@
+{
+  "short_name": "HealthyMonks",
+  "name": "Healthy Monks - Organic Health & Ayurvedic Store",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "id": "/",
+  "start_url": "/",
+  "background_color": "#0F172A",
+  "theme_color": "#166534",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "Shop 100% natural, organic ayurvedic herbs, health supplements, immunity boosters, and organic teas.",
+  "categories": ["shopping", "health", "lifestyle"]
+}
