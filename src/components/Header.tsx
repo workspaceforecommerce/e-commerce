@@ -170,6 +170,39 @@ export const Header: React.FC<HeaderProps> = ({
           ))}
 
           <button
+            onClick={() => setActiveTab('blog')}
+            className={`px-3 py-2 rounded-lg transition-all ${
+              activeTab === 'blog'
+                ? 'bg-emerald-700 text-white font-bold'
+                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+            }`}
+          >
+            Health Blog
+          </button>
+
+          <button
+            onClick={() => setActiveTab('about')}
+            className={`px-3 py-2 rounded-lg transition-all ${
+              activeTab === 'about'
+                ? 'bg-emerald-700 text-white font-bold'
+                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+            }`}
+          >
+            About Us
+          </button>
+
+          <button
+            onClick={() => setActiveTab('contact')}
+            className={`px-3 py-2 rounded-lg transition-all ${
+              activeTab === 'contact'
+                ? 'bg-emerald-700 text-white font-bold'
+                : 'text-slate-700 hover:text-emerald-700 hover:bg-slate-200/60'
+            }`}
+          >
+            Contact
+          </button>
+
+          <button
             onClick={() => setActiveTab('track')}
             className={`px-3 py-2 rounded-lg transition-all ml-auto ${
               activeTab === 'track'
@@ -177,7 +210,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-amber-800 font-bold hover:bg-amber-100'
             }`}
           >
-            Track Order Status
+            Track Order
           </button>
         </div>
       </div>

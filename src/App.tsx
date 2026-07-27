@@ -13,6 +13,9 @@ import { OrderTrackView } from './views/OrderTrackView';
 import { AdminView } from './views/AdminView';
 import { LoginView } from './views/LoginView';
 import { UserManagementView } from './views/UserManagementView';
+import { BlogView } from './views/BlogView';
+import { AboutView } from './views/AboutView';
+import { ContactView } from './views/ContactView';
 import { Category, Product } from './types';
 
 export const AppContent: React.FC = () => {
@@ -122,6 +125,9 @@ export const AppContent: React.FC = () => {
           )}
 
           {activeTab === 'admin' && <AdminView />}
+          {activeTab === 'blog' && <BlogView />}
+          {activeTab === 'about' && <AboutView />}
+          {activeTab === 'contact' && <ContactView />}
           {activeTab === 'login' && (
             <LoginView
               onLoginSuccess={(user) => {

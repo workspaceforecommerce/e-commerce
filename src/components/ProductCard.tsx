@@ -107,10 +107,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
               )}
             </div>
 
-            <div className="flex items-center text-amber-500 text-[10px] font-bold">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400 mr-0.5" />
-              <span>4.9</span>
-            </div>
+            <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold px-2 py-0.5 rounded-md">
+              4.9 / 5.0
+            </span>
           </div>
 
           <button
