@@ -3,19 +3,38 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import './index.css';
 
-// ── Dismiss splash screen after React has painted ────────────────────────────
-function dismissSplash() {
-  const splash = document.getElementById('hm-splash');
+// ── Splash Screen Logic ──────────────────────────────────────────────────────
+// Rules:
+//  • First launch in a browser session  → show for at least 2000ms, then fade out
+//  • Any subsequent reload/navigation   → hide instantly (no visible flash)
+//
+// "First launch" is tracked via sessionStorage so it resets when the tab closes
+// but persists across in-app SPA navigations and soft refreshes within the same tab.
+
+const SPLASH_KEY   = 'hm_splash_shown';
+const MIN_DURATION = 2000; // ms — minimum splash display time on first load
+const FADE_DURATION = 500;  // ms — CSS transition duration in index.html
+
+const splash      = document.getElementById('hm-splash');
+const isFirstLoad = !sessionStorage.getItem(SPLASH_KEY);
+
+function hideSplash() {
   if (!splash) return;
-  // Small rAF delay ensures the first React paint is flushed before we fade out
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      splash.classList.add('hm-hidden');
-      // Remove from DOM after transition completes (500ms)
-      setTimeout(() => splash.remove(), 520);
-    });
-  });
+  splash.classList.add('hm-hidden');
+  setTimeout(() => splash.remove(), FADE_DURATION + 20);
 }
+
+if (!isFirstLoad) {
+  // Not the first launch this session — remove the splash before React even mounts
+  // so the user never sees any green flash on internal reloads.
+  if (splash) splash.remove();
+} else {
+  // Mark as shown for the rest of this browser session
+  sessionStorage.setItem(SPLASH_KEY, '1');
+}
+
+// ── Mount React ───────────────────────────────────────────────────────────────
+const startTime = performance.now();
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
@@ -24,5 +43,15 @@ root.render(
   </React.StrictMode>
 );
 
-// Dismiss after render
-dismissSplash();
+// ── Dismiss Splash (first load only) ─────────────────────────────────────────
+// After React's first paint (double-rAF), calculate how much of the 2s minimum
+// has already elapsed and wait only the remaining time before fading out.
+if (isFirstLoad && splash) {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const elapsed   = performance.now() - startTime;
+      const remaining = Math.max(0, MIN_DURATION - elapsed);
+      setTimeout(hideSplash, remaining);
+    });
+  });
+}
