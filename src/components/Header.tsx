@@ -170,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Shop Catalog
             </button>
-            {categories.map((cat) => (
+            {(categories || []).map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => {
