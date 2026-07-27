@@ -37,6 +37,7 @@ import { ShippingManagementView } from './ShippingManagementView';
 import { ReturnsManagementView } from './ReturnsManagementView';
 import { NotificationsInvoicesView } from './NotificationsInvoicesView';
 import { CustomerManagementView } from './CustomerManagementView';
+import { StaffRbacManagementView } from './StaffRbacManagementView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
@@ -402,6 +403,9 @@ export const AdminView: React.FC = () => {
 
           {/* 5G. Enterprise Invoices, Multi-Channel Notifications & Order Timeline */}
           {activeTab === 'invoices-notifications' && <NotificationsInvoicesView />}
+
+          {/* 6B. Staff, Admin Users, Roles & Permissions (RBAC) */}
+          {activeTab === 'users-rbac' && <StaffRbacManagementView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
