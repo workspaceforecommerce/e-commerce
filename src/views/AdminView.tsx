@@ -50,7 +50,11 @@ import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
-export const AdminView: React.FC = () => {
+interface AdminViewProps {
+  onLogout?: () => void;
+}
+
+export const AdminView: React.FC<AdminViewProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'customers' | 'customer-analytics' | 'loyalty' | 'tickets' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'visual-builder' | 'blog-cms' | 'marketing-campaigns' | 'seo' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -213,11 +217,11 @@ export const AdminView: React.FC = () => {
 
   return (
     <div className="flex min-h-[85vh] -mx-4 sm:-mx-6 lg:-mx-8 -my-6 bg-slate-100 rounded-2xl overflow-hidden border border-slate-200">
-      <AdminSidebar activeTab={activeTab} setActiveTab={(tab: any) => setActiveTab(tab)} />
+      <AdminSidebar activeTab={activeTab} setActiveTab={(tab: any) => setActiveTab(tab)} onLogout={onLogout} />
 
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
         {/* Top Header */}
-        <AdminHeader onSearch={() => {}} />
+        <AdminHeader onSearch={() => {}} onLogout={onLogout} />
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
           {notificationMsg && (

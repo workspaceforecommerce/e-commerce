@@ -7,9 +7,10 @@ import { useI18n, Language } from '../context/I18nContext';
 interface AdminHeaderProps {
   onSearch?: (query: string) => void;
   onNavigateTab?: (tab: string) => void;
+  onLogout?: () => void;
 }
 
-export const AdminHeader: React.FC<AdminHeaderProps> = ({ onSearch, onNavigateTab = () => {} }) => {
+export const AdminHeader: React.FC<AdminHeaderProps> = ({ onSearch, onNavigateTab = () => {}, onLogout }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
@@ -107,6 +108,15 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({ onSearch, onNavigateTa
               <p className="font-bold text-slate-900 leading-tight">Admin Master</p>
               <span className="text-[10px] text-emerald-700 font-bold uppercase">Super Admin</span>
             </div>
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                title="Logout Admin"
+                className="ml-1 p-1.5 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 border border-slate-200 transition-colors flex items-center gap-1 font-bold text-xs"
+              >
+                <span>Logout</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

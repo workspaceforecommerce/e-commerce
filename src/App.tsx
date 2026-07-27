@@ -36,7 +36,24 @@ export const AppContent: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [placedOrderNumber, setPlacedOrderNumber] = useState<string>('');
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUserState] = useState<any | null>(() => {
+    const saved = localStorage.getItem('hm_user_session');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const setUser = (u: any | null) => {
+    setUserState(u);
+    if (u) {
+      localStorage.setItem('hm_user_session', JSON.stringify(u));
+    } else {
+      localStorage.removeItem('hm_user_session');
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setActiveTab('home');
+  };
 
   const [showExitToast, setShowExitToast] = useState(false);
 
@@ -105,6 +122,7 @@ export const AppContent: React.FC = () => {
           categories={categories}
           onSelectCategory={handleSelectCategory}
           user={user}
+          onLogout={handleLogout}
         />
 
         {/* Main View Router */}
@@ -160,7 +178,7 @@ export const AppContent: React.FC = () => {
 
           {activeTab === 'admin' && (
             (user && (['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(user.role) || user.email?.toLowerCase() === 'mohdnomaantalib@gmail.com')) ? (
-              <AdminView />
+              <AdminView onLogout={handleLogout} />
             ) : (
               <LoginView
                 onLoginSuccess={(loggedInUser) => {
