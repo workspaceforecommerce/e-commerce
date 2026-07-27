@@ -38,22 +38,42 @@ export const AppContent: React.FC = () => {
   const [placedOrderNumber, setPlacedOrderNumber] = useState<string>('');
   const [user, setUser] = useState<any | null>(null);
 
-  useEffect(() => {
-    // Fetch categories & products from Workers API Engine or fallback
-    const fetchData = async () => {
-      try {
-        const [catRes, prodRes]: [any, any] = await Promise.all([
-          fetch('/api/categories').then((r) => r.json()),
-          fetch('/api/products').then((r) => r.json()),
-        ]);
-        if (catRes.success) setCategories(catRes.categories);
-        if (prodRes.success) setProducts(prodRes.products);
-      } catch {
+  const [showExitToast, setShowExitToast] = useState(false);
 
+  useEffect(() => {
+    let lastBackPress = 0;
+
+    const handlePopState = (e: PopStateEvent) => {
+      // If user is not on home screen, navigate back to home screen first
+      if (activeTab !== 'home') {
+        e.preventDefault();
+        setActiveTab('home');
+        window.history.pushState({ page: 'home' }, '', '');
+        return;
+      }
+
+      // If already on home screen, calculate double back tap window (2 seconds)
+      const now = Date.now();
+      if (now - lastBackPress < 2000) {
+        // Second back press within 2 seconds -> Allow default app exit or history pop
+        return;
+      } else {
+        // First back press -> Prevent exit, show toast, and re-push history state
+        lastBackPress = now;
+        setShowExitToast(true);
+        setTimeout(() => setShowExitToast(false), 2000);
+        window.history.pushState({ page: 'home' }, '', '');
       }
     };
-    fetchData();
-  }, []);
+
+    // Push initial state so browser back button triggers popstate event
+    window.history.pushState({ page: activeTab }, '', '');
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [activeTab]);
 
   const handleSelectCategory = (id: number | null) => {
     setSelectedCategory(id);
@@ -227,6 +247,13 @@ export const AppContent: React.FC = () => {
           <p>Certified Organic Ayurvedic Supplements &amp; Herbal Remedies</p>
         </div>
       </footer>
+
+      {/* Toast Notification for Double Back Tap to Exit */}
+      {showExitToast && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg border border-slate-700/60 backdrop-blur-xs animate-in fade-in slide-in-from-bottom-3 duration-200">
+          Press back again to exit Healthy Monks
+        </div>
+      )}
 
       {/* Mobile Bottom Tab Navigation */}
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
