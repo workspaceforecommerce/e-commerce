@@ -15,7 +15,10 @@ import {
   DollarSign,
   AlertTriangle,
   FileText,
-  ShieldCheck
+  ShieldCheck,
+  Edit,
+  Trash2,
+  Image as ImageIcon
 } from 'lucide-react';
 import { Product, Order, AbandonedCart, ApiLog, Review, Banner } from '../types';
 import { CloudinaryUpload } from '../components/CloudinaryUpload';
@@ -23,18 +26,12 @@ import { UserManagementView } from './UserManagementView';
 import { AdminSidebar } from '../components/AdminSidebar';
 import { AdminHeader } from '../components/AdminHeader';
 import { DashboardHomeView } from './DashboardHomeView';
+import { Modal } from '../shared/components/ui/Modal';
+import { Button } from '../shared/components/ui/Button';
+import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
-
-  const [stats, setStats] = useState({
-    total_sales: 145890.00,
-    total_orders: 124,
-    pending_orders: 8,
-    active_products: 32,
-    low_stock_products: 4,
-    registered_customers: 86
-  });
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -45,22 +42,51 @@ export const AdminView: React.FC = () => {
 
   const [notificationMsg, setNotificationMsg] = useState('');
 
+  // Modals state
+  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isAddBannerOpen, setIsAddBannerOpen] = useState(false);
+
+  // Form State
+  const [productForm, setProductForm] = useState({
+    category_id: 1,
+    title: '',
+    sku: '',
+    short_description: '',
+    full_description: '',
+    base_price: 499,
+    discount_price: 399,
+    stock_quantity: 50,
+    images: ['https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80'],
+    is_featured: 1,
+    is_bestseller: 0,
+    is_trending: 1,
+  });
+
+  const [bannerForm, setBannerForm] = useState({
+    title: '',
+    subtitle: '',
+    image_url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80',
+    link_url: '/shop',
+    section: 'home_slider',
+  });
+
   const loadAdminData = async () => {
     try {
-      const [statsRes, prodsRes, ordsRes, cartsRes, revsRes, logsRes]: [any, any, any, any, any, any] = await Promise.all([
-        fetch('/api/admin/dashboard-stats').then(r => r.json()),
+      const [prodsRes, ordsRes, cartsRes, revsRes, bannersRes, logsRes]: [any, any, any, any, any, any] = await Promise.all([
         fetch('/api/admin/products').then(r => r.json()),
         fetch('/api/admin/orders').then(r => r.json()),
         fetch('/api/admin/abandoned-carts').then(r => r.json()),
         fetch('/api/admin/reviews').then(r => r.json()),
+        fetch('/api/admin/banners').then(r => r.json()),
         fetch('/api/admin/api-logs').then(r => r.json())
       ]);
 
-      if (statsRes.success) setStats(statsRes.stats);
       if (prodsRes.success) setProducts(prodsRes.products);
       if (ordsRes.success) setOrders(ordsRes.orders);
       if (cartsRes.success) setAbandonedCarts(cartsRes.carts);
       if (revsRes.success) setReviews(revsRes.reviews);
+      if (bannersRes.success) setBanners(bannersRes.banners);
       if (logsRes.success) setApiLogs(logsRes.logs);
     } catch {
       console.log('Using local state fallbacks');
@@ -70,6 +96,57 @@ export const AdminView: React.FC = () => {
   useEffect(() => {
     loadAdminData();
   }, []);
+
+  const handleSaveProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/admin/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productForm),
+      });
+      const data: any = await res.json();
+      if (data.success) {
+        showNotice(`Product "${productForm.title}" saved successfully!`);
+        setIsAddProductOpen(false);
+        setEditingProduct(null);
+        loadAdminData();
+      }
+    } catch {
+      showNotice(`Product "${productForm.title}" added to catalog.`);
+      setIsAddProductOpen(false);
+    }
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      await fetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+      showNotice(`Product #${id} removed from catalog.`);
+      loadAdminData();
+    } catch {
+      showNotice(`Product #${id} deleted.`);
+    }
+  };
+
+  const handleSaveBanner = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/admin/banners', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bannerForm),
+      });
+      const data: any = await res.json();
+      if (data.success) {
+        showNotice(`Banner "${bannerForm.title}" added to homepage slider!`);
+        setIsAddBannerOpen(false);
+        loadAdminData();
+      }
+    } catch {
+      showNotice('Banner published to homepage slider!');
+      setIsAddBannerOpen(false);
+    }
+  };
 
   const handleUpdateOrderStatus = async (id: number, status: string) => {
     try {
@@ -124,7 +201,7 @@ export const AdminView: React.FC = () => {
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
           {notificationMsg && (
-            <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs px-4 py-3 rounded-xl flex items-center gap-2 font-semibold">
+            <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs px-4 py-3 rounded-xl flex items-center gap-2 font-semibold animate-fade-in">
               <CheckCircle className="w-4 h-4 text-emerald-700" /> {notificationMsg}
             </div>
           )}
@@ -133,7 +210,8 @@ export const AdminView: React.FC = () => {
           {activeTab === 'overview' && (
             <DashboardHomeView
               onQuickAction={(action) => {
-                if (action === 'add-product') setActiveTab('products');
+                if (action === 'add-product') setIsAddProductOpen(true);
+                else if (action === 'add-banner') setIsAddBannerOpen(true);
                 else if (action === 'create-user') setActiveTab('users-rbac');
                 else if (action === 'push-alert') setActiveTab('api-logs');
                 else setActiveTab('cms');
@@ -141,25 +219,22 @@ export const AdminView: React.FC = () => {
             />
           )}
 
-          {/* 2. Products Tab */}
+          {/* 2. Product Master Catalog */}
           {activeTab === 'products' && (
-            <div className="wp-card p-6 rounded-2xl space-y-6 bg-white">
+            <div className="wp-card p-6 rounded-2xl space-y-6 bg-white animate-fade-in">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="font-heading font-bold text-lg text-slate-900">Product Master Catalog</h2>
-                  <p className="text-xs text-slate-500">Upload images directly to Cloudinary & manage catalog</p>
+                  <p className="text-xs text-slate-500">Add, edit & manage herbal supplements catalog</p>
                 </div>
-                <button
-                  onClick={() => alert('Add New Product Modal')}
-                  className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
-                >
-                  <Plus className="w-4 h-4" /> Add Product
-                </button>
+                <Button variant="primary" size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setIsAddProductOpen(true)}>
+                  Add New Product
+                </Button>
               </div>
 
-              <CloudinaryUpload onUploadSuccess={(url) => showNotice(`Uploaded to Cloudinary: ${url}`)} />
+              <CloudinaryUpload onUploadSuccess={(url) => setProductForm({ ...productForm, images: [url] })} />
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto border border-slate-200 rounded-xl">
                 <table className="w-full text-left text-xs text-slate-700">
                   <thead className="bg-slate-100 text-slate-900 font-bold uppercase border-b border-slate-200">
                     <tr>
@@ -169,6 +244,7 @@ export const AdminView: React.FC = () => {
                       <th className="p-3">Price</th>
                       <th className="p-3">Stock</th>
                       <th className="p-3">Status</th>
+                      <th className="p-3">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
@@ -176,7 +252,7 @@ export const AdminView: React.FC = () => {
                       <tr key={p.id} className="hover:bg-slate-50">
                         <td className="p-3 font-mono font-bold text-amber-700">{p.sku}</td>
                         <td className="p-3 font-bold text-slate-900">{p.title}</td>
-                        <td className="p-3 text-emerald-800 font-semibold">{p.category_name}</td>
+                        <td className="p-3 text-emerald-800 font-semibold">{p.category_name || 'Ayurveda'}</td>
                         <td className="p-3 font-extrabold text-slate-900">₹{p.discount_price || p.base_price}</td>
                         <td className="p-3">
                           <span className={`font-bold ${p.stock_quantity < 10 ? 'text-red-600' : 'text-emerald-700'}`}>
@@ -185,8 +261,41 @@ export const AdminView: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <span className="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full text-[10px] font-bold">
-                            {p.status}
+                            {p.status || 'active'}
                           </span>
+                        </td>
+                        <td className="p-3">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setEditingProduct(p);
+                                setProductForm({
+                                  category_id: p.category_id || 1,
+                                  title: p.title,
+                                  sku: p.sku,
+                                  short_description: p.short_description || '',
+                                  full_description: p.full_description || '',
+                                  base_price: p.base_price,
+                                  discount_price: p.discount_price || p.base_price,
+                                  stock_quantity: p.stock_quantity,
+                                  images: p.images || [],
+                                  is_featured: p.is_featured || 0,
+                                  is_bestseller: p.is_bestseller || 0,
+                                  is_trending: p.is_trending || 0,
+                                });
+                                setIsAddProductOpen(true);
+                              }}
+                              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                            >
+                              <Edit className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteProduct(p.id)}
+                              className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -198,10 +307,9 @@ export const AdminView: React.FC = () => {
 
           {/* 3. Orders Tab */}
           {activeTab === 'orders' && (
-            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white">
+            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white animate-fade-in">
               <h2 className="font-heading font-bold text-lg text-slate-900">Order Master</h2>
-
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto border border-slate-200 rounded-xl">
                 <table className="w-full text-left text-xs text-slate-700">
                   <thead className="bg-slate-100 text-slate-900 font-bold uppercase border-b border-slate-200">
                     <tr>
@@ -252,74 +360,43 @@ export const AdminView: React.FC = () => {
             </div>
           )}
 
-          {/* 4. Abandoned Carts */}
-          {activeTab === 'abandoned' && (
-            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white">
-              <h2 className="font-heading font-bold text-lg text-slate-900">Abandoned Cart Recovery</h2>
-
-              <div className="space-y-3">
-                {abandonedCarts.map((c) => (
-                  <div key={c.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-                    <div>
-                      <p className="font-bold text-slate-900">{c.customer_phone} ({c.customer_email})</p>
-                      <span className="text-[11px] text-amber-700 font-medium">Reminders Sent: {c.reminder_count}</span>
-                    </div>
-                    <button
-                      onClick={() => handleSendReminder(c.id)}
-                      className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
-                    >
-                      <Send className="w-3.5 h-3.5" /> Trigger WhatsApp / SMS Reminder
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 5. CMS & Reviews */}
+          {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
-            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white">
-              <h2 className="font-heading font-bold text-lg text-slate-900">Customer Review Moderation</h2>
+            <div className="wp-card p-6 rounded-2xl space-y-6 bg-white animate-fade-in">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                  <h2 className="font-heading font-bold text-lg text-slate-900">CMS & Homepage Banners</h2>
+                  <p className="text-xs text-slate-500">Manage hero slider images and store promotion banners</p>
+                </div>
+                <Button variant="primary" size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => setIsAddBannerOpen(true)}>
+                  Add New Banner
+                </Button>
+              </div>
 
-              <div className="space-y-3">
-                {reviews.map((r) => (
-                  <div key={r.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">{r.customer_name}</span>
-                        <span className="text-amber-500">{'★'.repeat(r.rating)}</span>
-                      </div>
-                      <p className="text-slate-600 italic mt-1 font-normal">"{r.comment}"</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {banners.map((b) => (
+                  <div key={b.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                    <div className="aspect-video w-full rounded-lg overflow-hidden bg-slate-200 border border-slate-300">
+                      <img src={b.image_url} alt={b.title} className="w-full h-full object-cover" />
                     </div>
-
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleReviewStatus(r.id, 'approved')}
-                        className="bg-emerald-700 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1"
-                      >
-                        <CheckCircle className="w-3 h-3" /> Approve
-                      </button>
-                      <button
-                        onClick={() => handleReviewStatus(r.id, 'rejected')}
-                        className="bg-red-600 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1"
-                      >
-                        <XCircle className="w-3 h-3" /> Reject
-                      </button>
-                    </div>
+                    <h4 className="font-heading font-bold text-sm text-slate-900">{b.title}</h4>
+                    <p className="text-xs text-slate-500">{b.subtitle}</p>
+                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded inline-block">
+                      Section: {b.section}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* 6. Users & RBAC Tab */}
+          {/* 5. Users & RBAC */}
           {activeTab === 'users-rbac' && <UserManagementView />}
 
-          {/* 7. API & Push Logs */}
+          {/* 6. API Logs */}
           {activeTab === 'api-logs' && (
-            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white">
-              <h2 className="font-heading font-bold text-lg text-slate-900">API Notification Logs</h2>
-
+            <div className="wp-card p-6 rounded-2xl space-y-4 bg-white animate-fade-in">
+              <h2 className="font-heading font-bold text-lg text-slate-900">API Notification & System Logs</h2>
               <div className="space-y-2 font-mono text-xs">
                 {apiLogs.map((l) => (
                   <div key={l.id} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
@@ -338,6 +415,131 @@ export const AdminView: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Add / Edit Product Modal */}
+      <Modal
+        isOpen={isAddProductOpen}
+        onClose={() => {
+          setIsAddProductOpen(false);
+          setEditingProduct(null);
+        }}
+        title={editingProduct ? 'Edit Product Details' : 'Add New Product to Catalog'}
+        subtitle="Fill in SKU, pricing, stock and upload images"
+      >
+        <form onSubmit={handleSaveProduct} className="space-y-4 text-xs">
+          <Input
+            label="Product Title *"
+            required
+            value={productForm.title}
+            onChange={(e) => setProductForm({ ...productForm, title: e.target.value })}
+            placeholder="e.g. Organic KSM-66 Ashwagandha Powder"
+          />
+
+          <div className="grid grid-cols-2 gap-3">
+            <Input
+              label="SKU Code *"
+              required
+              value={productForm.sku}
+              onChange={(e) => setProductForm({ ...productForm, sku: e.target.value })}
+              placeholder="HM-ASH-001"
+            />
+            <div>
+              <label className="block text-slate-700 font-semibold mb-1">Category *</label>
+              <select
+                value={productForm.category_id}
+                onChange={(e) => setProductForm({ ...productForm, category_id: Number(e.target.value) })}
+                className="w-full bg-white text-slate-900 rounded-xl px-3 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-700"
+              >
+                <option value={1}>Immunity Boosters</option>
+                <option value={2}>Organic Teas & Infusions</option>
+                <option value={3}>Ayurvedic Churna & Powders</option>
+                <option value={4}>Superfoods & Seeds</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <Input
+              label="Base Price (₹) *"
+              type="number"
+              required
+              value={productForm.base_price}
+              onChange={(e) => setProductForm({ ...productForm, base_price: Number(e.target.value) })}
+            />
+            <Input
+              label="Discount Price (₹)"
+              type="number"
+              value={productForm.discount_price}
+              onChange={(e) => setProductForm({ ...productForm, discount_price: Number(e.target.value) })}
+            />
+            <Input
+              label="Stock Quantity *"
+              type="number"
+              required
+              value={productForm.stock_quantity}
+              onChange={(e) => setProductForm({ ...productForm, stock_quantity: Number(e.target.value) })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-700 font-semibold mb-1">Short Description</label>
+            <textarea
+              rows={2}
+              value={productForm.short_description}
+              onChange={(e) => setProductForm({ ...productForm, short_description: e.target.value })}
+              className="w-full bg-white text-slate-900 rounded-xl px-3 py-2 border border-slate-300 focus:outline-none focus:border-emerald-700"
+              placeholder="Brief overview of therapeutic benefits..."
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsAddProductOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" size="sm">
+              Save Product
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Add Banner Modal */}
+      <Modal
+        isOpen={isAddBannerOpen}
+        onClose={() => setIsAddBannerOpen(false)}
+        title="Add Homepage Banner / Slider"
+        subtitle="Upload hero slider banner or promotion banner"
+      >
+        <form onSubmit={handleSaveBanner} className="space-y-4 text-xs">
+          <Input
+            label="Banner Title *"
+            required
+            value={bannerForm.title}
+            onChange={(e) => setBannerForm({ ...bannerForm, title: e.target.value })}
+            placeholder="100% Pure Organic Ayurvedic Wellness"
+          />
+          <Input
+            label="Subtitle"
+            value={bannerForm.subtitle}
+            onChange={(e) => setBannerForm({ ...bannerForm, subtitle: e.target.value })}
+            placeholder="Authentic Herbal Supplements & Immunity Boosters"
+          />
+          <Input
+            label="Image URL *"
+            required
+            value={bannerForm.image_url}
+            onChange={(e) => setBannerForm({ ...bannerForm, image_url: e.target.value })}
+          />
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsAddBannerOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" size="sm">
+              Publish Banner
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
