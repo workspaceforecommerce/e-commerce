@@ -29,12 +29,13 @@ import { DashboardHomeView } from './DashboardHomeView';
 import { VariantManagementView } from './VariantManagementView';
 import { MediaLibraryView } from './MediaLibraryView';
 import { BrandsView } from './BrandsView';
+import { ReviewsView } from './ReviewsView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -370,6 +371,9 @@ export const AdminView: React.FC = () => {
 
           {/* 4F. Brands, Manufacturers & Collections */}
           {activeTab === 'brands' && <BrandsView />}
+
+          {/* 4G. Reviews, Ratings & Q&A */}
+          {activeTab === 'reviews' && <ReviewsView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (

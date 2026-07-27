@@ -12,6 +12,7 @@ import dashboardApp from './routes/dashboard';
 import { variantApp } from './routes/variants';
 import mediaApp from './routes/media';
 import { brandsApp, mfgApp, collectionsApp } from './routes/brands';
+import reviewsApp from './routes/reviews';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -58,5 +59,6 @@ app.route('/api/media', mediaApp);
 app.route('/api/brands', brandsApp);
 app.route('/api/manufacturers', mfgApp);
 app.route('/api/collections', collectionsApp);
+app.route('/api/reviews', reviewsApp);
 
 export default app;
