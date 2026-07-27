@@ -40,12 +40,13 @@ import { CustomerManagementView } from './CustomerManagementView';
 import { StaffRbacManagementView } from './StaffRbacManagementView';
 import { SupportHelpDeskView } from './SupportHelpDeskView';
 import { LoyaltyRewardsWalletView } from './LoyaltyRewardsWalletView';
+import { CustomerAnalyticsSegmentationView } from './CustomerAnalyticsSegmentationView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'customers' | 'loyalty' | 'tickets' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'customers' | 'customer-analytics' | 'loyalty' | 'tickets' | 'payments' | 'shipping' | 'returns' | 'invoices-notifications' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -393,6 +394,9 @@ export const AdminView: React.FC = () => {
 
           {/* 6A. Customer Management (CRM) */}
           {activeTab === 'customers' && <CustomerManagementView />}
+
+          {/* 6E. Customer Analytics, Segmentation & Marketing Automation */}
+          {activeTab === 'customer-analytics' && <CustomerAnalyticsSegmentationView />}
 
           {/* 6D. Loyalty, Rewards, Wallet & Referrals */}
           {activeTab === 'loyalty' && <LoyaltyRewardsWalletView />}
