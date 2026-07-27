@@ -115,6 +115,12 @@
         <div class="hm-dot"></div>
       </div>
     </div>
+    <script>
+      if (sessionStorage.getItem('hm_splash_shown')) {
+        var s = document.getElementById('hm-splash');
+        if (s) s.parentNode.removeChild(s);
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
