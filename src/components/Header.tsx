@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
                 Healthy Monks
               </span>
               <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest block mt-0.5">
-                Ayurvedic Wellness PWA
+                Ayurvedic Wellness Store
               </span>
             </div>
           </button>
@@ -120,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2.5 rounded-xl transition-all font-bold text-xs shadow-xs"
           >
             <User className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">Admin WP</span>
+            <span className="hidden sm:inline">Control Panel</span>
           </button>
         </div>
       </div>

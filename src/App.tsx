@@ -185,8 +185,8 @@ export const AppContent: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto border-t border-slate-100 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
-          <p>© 2026 Healthy Monks WooCommerce PWA. All rights reserved.</p>
-          <p>Powered by Cloudflare D1 SQL Database & Cloudflare Pages</p>
+          <p>© 2026 Healthy Monks Organic Store. All rights reserved.</p>
+          <p>Certified Organic Ayurvedic Supplements & Herbal Remedies</p>
         </div>
       </footer>
 
