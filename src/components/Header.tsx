@@ -54,9 +54,11 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setActiveTab('home')}
             className="flex items-center gap-2.5 text-left group"
           >
-            <div className="w-10 h-10 rounded-xl bg-emerald-700 flex items-center justify-center text-white font-heading font-extrabold text-xl shadow-xs group-hover:bg-emerald-800 transition-all">
-              HM
-            </div>
+            <img
+              src="/logo.png"
+              alt="Healthy Monks"
+              className="w-10 h-10 rounded-xl shadow-xs object-cover"
+            />
             <div>
               <span className="font-heading font-extrabold text-lg sm:text-xl text-slate-900 leading-none block tracking-tight">
                 Healthy Monks

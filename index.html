@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#166534" />
     
@@ -25,8 +26,95 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Splash Screen Styles -->
+    <style>
+      #hm-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        background: #166534;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #hm-splash.hm-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #hm-splash .hm-logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 28px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        animation: hm-pop 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+      }
+      #hm-splash .hm-brand {
+        color: #fff;
+        font-family: 'Outfit', sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        animation: hm-fade-up 0.6s 0.25s ease both;
+        opacity: 0;
+      }
+      #hm-splash .hm-tagline {
+        color: rgba(255,255,255,0.7);
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        animation: hm-fade-up 0.6s 0.4s ease both;
+        opacity: 0;
+        margin-top: -18px;
+      }
+      #hm-splash .hm-dots {
+        display: flex;
+        gap: 7px;
+        animation: hm-fade-up 0.6s 0.55s ease both;
+        opacity: 0;
+      }
+      #hm-splash .hm-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.35);
+        animation: hm-pulse 1.4s ease-in-out infinite;
+      }
+      #hm-splash .hm-dot:nth-child(2) { animation-delay: 0.18s; }
+      #hm-splash .hm-dot:nth-child(3) { animation-delay: 0.36s; }
+      @keyframes hm-pop {
+        0%   { opacity: 0; transform: scale(0.6); }
+        70%  { opacity: 1; transform: scale(1.06); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      @keyframes hm-fade-up {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes hm-pulse {
+        0%,100% { opacity: 0.3; transform: scale(0.85); }
+        50%      { opacity: 1;   transform: scale(1.2); }
+      }
+    </style>
   </head>
   <body>
+    <!-- Splash / Loading Screen -->
+    <div id="hm-splash" aria-hidden="true">
+      <img src="/logo.png" alt="Healthy Monks" class="hm-logo" />
+      <span class="hm-brand">Healthy Monks</span>
+      <span class="hm-tagline">Ayurvedic Wellness Store</span>
+      <div class="hm-dots">
+        <div class="hm-dot"></div>
+        <div class="hm-dot"></div>
+        <div class="hm-dot"></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     

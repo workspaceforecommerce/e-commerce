@@ -173,8 +173,11 @@ export const AppContent: React.FC = () => {
       <footer className="border-t border-slate-200 bg-white pt-10 pb-8 px-4 text-xs text-slate-600 mt-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-3">
-            <span className="font-heading font-extrabold text-lg text-slate-900 block">Healthy Monks</span>
-            <p className="text-slate-500 leading-relaxed">100% Certified Organic & Authentic Ayurvedic Formulations Sourced Directly from Himalayan Farms.</p>
+            <div className="flex items-center gap-2 mb-1">
+              <img src="/logo.png" alt="Healthy Monks" className="w-9 h-9 rounded-xl object-cover" />
+              <span className="font-heading font-extrabold text-lg text-slate-900 block">Healthy Monks</span>
+            </div>
+            <p className="text-slate-500 leading-relaxed">100% Certified Organic &amp; Authentic Ayurvedic Formulations Sourced Directly from Himalayan Farms.</p>
             <span className="inline-block bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded border border-emerald-200">
               FSSAI & Ayush Ministry Approved
             </span>

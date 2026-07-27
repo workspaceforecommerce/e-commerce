@@ -53,9 +53,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
         <div className="p-4 border-b border-slate-800 flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-700 flex items-center justify-center font-heading font-extrabold text-sm text-white">
-                HM
-              </div>
+              <img src="/logo.png" alt="Healthy Monks" className="w-8 h-8 rounded-lg object-cover" />
               <div>
                 <h3 className="font-heading font-extrabold text-sm text-white leading-tight">
                   Healthy Monks
