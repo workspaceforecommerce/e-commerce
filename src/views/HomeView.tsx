@@ -34,7 +34,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       <section className="wp-card rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-900 via-emerald-800 to-slate-900 text-white relative shadow-md">
         <div className="p-6 sm:p-10 lg:p-14 max-w-3xl space-y-4 sm:space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-emerald-700/80 backdrop-blur-xs text-amber-300 text-[11px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full border border-emerald-500/50">
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
             <span>100% Certified Himalayan Organic Formulations</span>
           </div>
 

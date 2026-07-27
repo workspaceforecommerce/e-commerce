@@ -48,15 +48,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* 2. Main Brand Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 flex items-center justify-between gap-4">
-        {/* Brand Logo & Mobile Toggle */}
+        {/* Brand Logo */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-
           <button
             onClick={() => setActiveTab('home')}
             className="flex items-center gap-2.5 text-left group"

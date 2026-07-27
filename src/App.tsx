@@ -151,9 +151,14 @@ export const AppContent: React.FC = () => {
           {activeTab === 'contact' && <ContactView />}
           {activeTab === 'login' && (
             <LoginView
-              onLoginSuccess={(user) => {
-                alert(`Welcome back, ${user.first_name}! Role: ${user.role}`);
-                setActiveTab('home');
+              onLoginSuccess={(loggedInUser) => {
+                setUser(loggedInUser);
+                const isAdmin = ['Super Admin', 'Admin', 'Sub Admin', 'Inventory Manager', 'Order Manager', 'Content Manager', 'Marketing Manager'].includes(loggedInUser?.role) || loggedInUser?.email === 'mohdnomaantalib@gmail.com';
+                if (isAdmin) {
+                  setActiveTab('admin');
+                } else {
+                  setActiveTab('home');
+                }
               }}
               onBackToHome={() => setActiveTab('home')}
             />
