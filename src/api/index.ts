@@ -29,6 +29,7 @@ import loyaltyApp from './routes/loyalty';
 import analyticsApp from './routes/analytics';
 import cmsApp from './routes/cms';
 import builderApp from './routes/builder';
+import contentApp from './routes/content';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -129,5 +130,6 @@ app.route('/api/loyalty', loyaltyApp);
 app.route('/api/analytics', analyticsApp);
 app.route('/api/cms', cmsApp);
 app.route('/api/builder', builderApp);
+app.route('/api/content', contentApp);
 
 export default app;
