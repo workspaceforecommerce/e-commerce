@@ -32,12 +32,13 @@ import { BrandsView } from './BrandsView';
 import { ReviewsView } from './ReviewsView';
 import { CouponManagementView } from './CouponManagementView';
 import { OrderManagementView } from './OrderManagementView';
+import { PaymentManagementView } from './PaymentManagementView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'brands' | 'reviews' | 'coupons' | 'orders' | 'payments' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -382,6 +383,9 @@ export const AdminView: React.FC = () => {
 
           {/* 5C. Order Management */}
           {activeTab === 'orders' && <OrderManagementView />}
+
+          {/* 5D. Payment Gateway & Transaction Management */}
+          {activeTab === 'payments' && <PaymentManagementView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (
