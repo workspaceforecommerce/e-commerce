@@ -27,12 +27,13 @@ import { AdminSidebar } from '../components/AdminSidebar';
 import { AdminHeader } from '../components/AdminHeader';
 import { DashboardHomeView } from './DashboardHomeView';
 import { VariantManagementView } from './VariantManagementView';
+import { MediaLibraryView } from './MediaLibraryView';
 import { Modal } from '../shared/components/ui/Modal';
 import { Button } from '../shared/components/ui/Button';
 import { Input } from '../shared/components/ui/Input';
 
 export const AdminView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'variants' | 'media' | 'orders' | 'abandoned' | 'cms' | 'users-rbac' | 'api-logs'>('overview');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -362,6 +363,9 @@ export const AdminView: React.FC = () => {
           )}
 
           {activeTab === 'variants' && <VariantManagementView />}
+
+          {/* 4E. Media Library */}
+          {activeTab === 'media' && <MediaLibraryView />}
 
           {/* 4. CMS & Banner Manager */}
           {activeTab === 'cms' && (

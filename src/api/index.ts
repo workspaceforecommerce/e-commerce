@@ -10,6 +10,7 @@ import authApp from './routes/auth';
 import usersApp from './routes/users';
 import dashboardApp from './routes/dashboard';
 import { variantApp } from './routes/variants';
+import mediaApp from './routes/media';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -26,7 +27,7 @@ app.use('*', async (c, next) => {
 // Enable CORS
 app.use('*', cors({
   origin: '*',
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
 }));
 
@@ -52,5 +53,7 @@ app.route('/api/coupons', couponsApp);
 app.route('/api/orders', ordersApp);
 app.route('/api/admin', adminApp);
 app.route('/api/cloudinary', cloudinaryApp);
+app.route('/api/media', mediaApp);
 
 export default app;
+

@@ -14,7 +14,8 @@ import {
   LogOut,
   Sparkles,
   MessageSquare,
-  Activity
+  Activity,
+  Images
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -31,6 +32,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'products', label: 'Product Catalog', icon: Package },
     { id: 'categories', label: 'Categories & Tree', icon: FolderTree },
     { id: 'variants', label: 'Variants & Attributes', icon: Sliders },
+    { id: 'media', label: 'Media Library', icon: Images },
     { id: 'orders', label: 'Order Fulfillment', icon: ShoppingBag },
     { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },
     { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
