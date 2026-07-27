@@ -17,9 +17,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    email: 'mohdnomaantalib@gmail.com',
-    phone: '+91 9812345678',
-    password: 'Cba@4321',
+    email: '',
+    phone: '',
+    password: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -164,6 +164,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
                 <label className="block text-slate-700 font-semibold mb-1">Last Name</label>
                 <input
                   type="text"
+                  autoComplete="off"
                   placeholder="Sharma"
                   value={formData.last_name}
                   onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
@@ -173,20 +174,41 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
             </div>
           )}
 
-          <div>
-            <label className="block text-slate-700 font-semibold mb-1">Email Address *</label>
-            <div className="relative">
-              <input
-                type="email"
-                required
-                placeholder="aarav@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full bg-white text-slate-900 rounded-xl pl-9 pr-3 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-700"
-              />
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+          {!isRegister && (
+            <div>
+              <label className="block text-slate-700 font-semibold mb-1">Email Address *</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  autoComplete="off"
+                  placeholder="aarav@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-white text-slate-900 rounded-xl pl-9 pr-3 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-700"
+                />
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              </div>
             </div>
-          </div>
+          )}
+
+          {isRegister && (
+            <div>
+              <label className="block text-slate-700 font-semibold mb-1">Email Address *</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  autoComplete="off"
+                  placeholder="aarav@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-white text-slate-900 rounded-xl pl-9 pr-3 py-2.5 border border-slate-300 focus:outline-none focus:border-emerald-700"
+                />
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              </div>
+            </div>
+          )}
 
           {loginMethod === 'password' && (
             <div>
@@ -195,6 +217,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onBackToHo
                 <input
                   type="password"
                   required
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}

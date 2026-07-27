@@ -9,6 +9,7 @@ import cloudinaryApp from './routes/cloudinary';
 import authApp from './routes/auth';
 import usersApp from './routes/users';
 import dashboardApp from './routes/dashboard';
+import { variantApp } from './routes/variants';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -46,6 +47,7 @@ app.route('/api/dashboard', dashboardApp);
 app.route('/api/auth', authApp);
 app.route('/api/users', usersApp);
 app.route('/api/products', productsApp);
+app.route('/api/variants', variantApp);
 app.route('/api/coupons', couponsApp);
 app.route('/api/orders', ordersApp);
 app.route('/api/admin', adminApp);

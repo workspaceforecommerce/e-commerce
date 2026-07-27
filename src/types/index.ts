@@ -8,13 +8,41 @@ export interface Category {
   status: string;
 }
 
+export interface AttributeValue {
+  id: number;
+  attribute_id: number;
+  value: string;
+  slug: string;
+  color_code?: string;
+  image?: string;
+  sort_order: number;
+  status: string;
+}
+
+export interface Attribute {
+  id: number;
+  name: string;
+  slug: string;
+  display_type: 'Dropdown' | 'Radio' | 'Color Swatch' | 'Image Swatch' | 'Button' | 'Text';
+  description?: string;
+  status: string;
+  sort_order: number;
+  values?: AttributeValue[];
+}
+
 export interface ProductVariant {
   id: number;
   product_id: number;
   variant_name: string;
-  sku: string;
+  variant_sku: string;
+  sku?: string;
+  barcode?: string;
   price: number;
-  stock_quantity: number;
+  compare_price?: number | null;
+  cost_price?: number | null;
+  weight?: number;
+  status: string;
+  default_variant: number;
   attributes?: Record<string, string>;
 }
 

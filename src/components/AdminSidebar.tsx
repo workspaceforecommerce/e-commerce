@@ -30,6 +30,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActive
     { id: 'overview', label: 'Dashboard Overview', icon: LayoutDashboard },
     { id: 'products', label: 'Product Catalog', icon: Package },
     { id: 'categories', label: 'Categories & Tree', icon: FolderTree },
+    { id: 'variants', label: 'Variants & Attributes', icon: Sliders },
     { id: 'orders', label: 'Order Fulfillment', icon: ShoppingBag },
     { id: 'users-rbac', label: 'Users & RBAC Roles', icon: ShieldCheck },
     { id: 'abandoned', label: 'Abandoned Carts', icon: Clock },
